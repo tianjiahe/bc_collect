@@ -1,0 +1,126 @@
+用对话框创建CDialogBar派生的类并在CReBar上添加
+ 
+
+摘要：本文详细解说了CDialogBar的具体使用过程，可以做为VC++和MFC新手学习总结用。
+ 
+
+一、创建DialogBar的派生类
+首先，创建对话框资源：在对话框资源编辑器内生成一个Dialog资源，并将其风格（Style）属性必须设置为Child，不能设置为Overlapped或Popup，否则运行肯定出错；至于边界属性则随用户自己喜欢，一般都是选择None。其余属性也随用户选择，一般没有特殊要求还是选择默认的好。
+其次，创建基于CDialog的派生类：打开ClassWizard，为以上创建的资源添加一个以CDialog为基类的派生类（因为ClassWizard没有将CDialogBar列在基类目录清单中，所以用户只能先以CDialog类派生）。
+再次，修改派生类以CDialogBar为基类：通常需要手工修改几处代码，在本例中派生类以CDataStatus命名。（注：以后讲解中凡是手工改动都是以灰背景显示）
+1、  在头文件中修改继承关系
+将class CDataStatus : public CDialog  改为class CDataStatus : public CDialogBar
+2、  在代码文件中修该构造函数继承关系
+将CDataStatus::CDataStatus(CWnd* pParent /*=NULL*/)
+: CDialog(CDataStatus::IDD, pParent)
+{
+       //{{AFX_DATA_INIT(CDataStatus)
+              // NOTE: the ClassWizard will add member initialization here
+       //}}AFX_DATA_INIT
+}
+改为
+CDataStatus::CDataStatus(CWnd* pParent /*=NULL*/)
+{
+       //{{AFX_DATA_INIT(CDataStatus)
+              // NOTE: the ClassWizard will add member initialization here
+       //}}AFX_DATA_INIT
+}
+3、  将DDX绑定函数中的继承关系去掉
+即将void CDataStatus::DoDataExchange(CDataExchange* pDX)
+{
+       CDialog::DoDataExchange(pDX);
+       //{{AFX_DATA_MAP(CCurrentCheckDlg)
+       ………..
+       //}}AFX_DATA_MAP
+}
+改为
+void CDataStatus::DoDataExchange(CDataExchange* pDX)
+{
+       //{{AFX_DATA_MAP(CCurrentCheckDlg)
+       ………….
+       //}}AFX_DATA_MAP
+}
+4、  重新初始化函数（这个相当重要，如果不这么做的话，DDX函数形同虚设，当然用户的工具条如果没有用到DDX的话当然可以不加这段代码）：
+首先在ClassWizard的MessageMap中对消息该CDataStatus类的WM_INITDIALOG消息添加处理函数默认名为OnInitDialog。
+其次手工修改代码如下：
+1、             添加消息映射函数。由于对话框形式的初始化函数消息并未加载到消息映射内，为此我们需要手工添加，要不然代码无法拦截该工具条的初始化消息，形式如下：
+将BEGIN_MESSAGE_MAP(CDataStatus, CDialogBar)
+   //{{AFX_MSG_MAP(CDataStatus)
+   .......
+   //}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+改为：
+BEGIN_MESSAGE_MAP(CDataStatus, CDialogBar)
+   //{{AFX_MSG_MAP(CDataStatus)
+   .......
+   ON_MESSAGE(WM_INITDIALOG,OnInitDialog)
+   //}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+2、             修改OnInitDialog函数，此函数并未传递参数，但是在这里我们需要让它传递参数，代码如下修改（当然头文件中，对声明也要做修改，在这里就不作赘述了）
+将BOOL CDataStatus::OnInitDialog()
+{
+   CDialogBar::OnInitDialog();
+  
+   // TODO: Add extra initialization here
+   return TRUE;  // return TRUE unless you set the focus to a control
+              // EXCEPTION: OCX Property Pages should return FALSE
+}
+改为：
+BOOL CDataStatus::OnInitDialog(UINT wParam,LONG lParam)
+{
+   //CDialogBar::OnInitDialog();
+  
+   // TODO: Add extra initialization here
+   BOOL bRet = HandleInitDialog(wParam,lParam);
+   if (!UpdateData(FALSE))
+   {
+          TRACE("InitCDataStatus Failed！");
+   }
+   return TRUE;  // return TRUE unless you set the focus to a control
+                 // EXCEPTION: OCX Property Pages should return FALSE
+}
+ 
+
+二、在框架类中实现该派生类的对象化
+首先，在框架类的头文件内声明实例对象，本例实例化：CDataStatus      m_wndDataStatus;当然头文件中不可避免要包含新派生类的头文件。
+其次，在框架类的OnCreate函数内创建对象并将对象绑定对话框资源。形式与创建ToolBar原理一样，本例实例如下：
+if (!m_wndDataStatus.Create(this,IDD_DATASTATUS,WS_VISIBLE|WS_CHILD
+|CBRS_SIZE_DYNAMIC|CBRS_BOTTOM,IDD_DATASTATUS))
+       {
+              TRACE0("Failed to create CDataStatus bar!");
+              return -1;
+       }
+再次，最为关键的一点就是重写框架类的OnCmdMsg虚函数。如果不重写该函数，那么不光DDX功能无法实现，连最基本的OnCommand事件都无法实现。而且还得手工添加代码，形式如下：
+BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra,
+AFX_CMDHANDLERINFO* pHandlerInfo)
+{
+       // TODO: Add your specialized code here and/or call the base class
+       return CFrameWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
+}
+改为：
+BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
+{
+       // TODO: Add your specialized code here and/or call the base class
+       if (m_wndDataStatus.OnCmdMsg(nID,nCode,pExtra,pHandlerInfo))
+              return    TRUE;
+       return CFrameWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
+}
+三、在CReBar上添加该实例化对象
+其实这一步倒是相当简单，只是自己以前没用过这个类，所以在这里也顺便用了一下。
+首先，在框架类的头文件中用CRebar声明一个对象，如CReBar   m_wndReBar;
+其次，在框架类的代码文件中的OnCreat函数体内，生成对象，代码如下：
+if (!m_wndReBar.Create(this,RBS_BANDBORDERS,WS_CHILD |
+WS_VISIBLE| CBRS_BOTTOM|WS_CLIPSIBLINGS|WS_CLIPCHILDREN))
+       {
+              TRACE0("Failed to create  Rebar /n");
+              return -1;
+       }
+再次，就是将所要添加的toolbar以及新生成的CDataStatus对象m_wndDataStatus加进Rebar的对象m_wndReBar中，代码如下：
+m_wndReBar.AddBar(&m_wndDataStatus,NULL,NULL,
+RBBS_GRIPPERALWAYS|RBBS_FIXEDBMP);
+
+
+
+光谱范围：  200mn--1500nm
+分辨率：    0.4nm / mm
+最小步进：  0.01nm
