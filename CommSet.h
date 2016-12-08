@@ -94,10 +94,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-#ifndef _DEBUG
-inline CCollectDoc* CCommSet:GetDocument()
-   { return (CCollectDoc*)m_pDocument; }
-#endif
 /////////////////////////////////////////////////////////////////////////////
 
 //{{AFX_INSERT_LOCATION}}

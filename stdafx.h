@@ -28,4 +28,8 @@
 #include "protocol.h"
 #include "IniOp.h"				   // ini 文件操作
 
+#include "CSPVC.h"                 // 光纤单色仪厂家提供，用于下位机测控
+
 #define  CONFIG_FILE	"BC.ini"      //系统配置文件名称
+
+#pragma comment(lib, "CSPVC.lib")

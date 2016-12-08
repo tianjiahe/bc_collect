@@ -93,6 +93,22 @@
 #define IDC_LIST_TX_DATA                1081
 #define IDC_LIST_RX_DATA                1083
 #define IDC_EDIT_RX_DATA                1084
+#define IDC_BTN_TEST_                   1085
+#define IDC_BTN_RESET                   1087
+#define IDC_BTN_STOP                    1088
+#define IDC_BTN_WAVELEN_GOTO            1089
+#define IDC_BTN_SPEED_SET               1090
+#define IDC_EDIT_TEST                   1092
+#define IDC_EDIT_OUTPUT                 1093
+#define IDC_BTN_COLLECT                 1094
+#define IDC_CMB_SPEED                   1095
+#define IDC_CMB_WAVELEN                 1096
+#define IDC_CMB_WAVELEN_OFFSET          1097
+#define IDC_SPIN_WAVELEN_OFFSET         1098
+#define IDC_EDIT_ONLINE                 1099
+#define IDC_EDIT_CURWAVELEN             1100
+#define IDC_EDIT_COLLECT                1101
+#define IDC_LIST2                       1104
 #define ID_STRINGLIST                   32774
 #define ID_TYPEDLIST                    32775
 #define ID_CLIST                        32776
@@ -133,9 +149,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        149
+#define _APS_NEXT_RESOURCE_VALUE        150
 #define _APS_NEXT_COMMAND_VALUE         32790
-#define _APS_NEXT_CONTROL_VALUE         1085
+#define _APS_NEXT_CONTROL_VALUE         1105
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

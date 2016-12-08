@@ -91,6 +91,10 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;hpj;bat;for;f90"
 # Begin Source File
 
+SOURCE=.\BinEdit.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\CmdToolBar.cpp
 # End Source File
 # Begin Source File
@@ -196,6 +200,10 @@ SOURCE=.\typtrmap.cpp
 # PROP Default_Filter "h;hpp;hxx;inl;fi;fd"
 # Begin Source File
 
+SOURCE=.\BinEdit.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\CmdToolBar.h
 # End Source File
 # Begin Source File
@@ -213,6 +221,10 @@ SOURCE=.\collevw.h
 # Begin Source File
 
 SOURCE=.\CommSet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CSPVC.h
 # End Source File
 # Begin Source File
 

@@ -84,11 +84,11 @@ void CCommSet::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(  pDX, IDC_CHECK_COM_FLOW,		m_bCommFlow);
 	DDX_CBIndex(pDX, IDC_COMBO_COM_DATABIT,		m_nDataBits);
 	DDX_Text(pDX, IDC_STATIC_COMM_STATE_TIP,    m_sComStateTip); 
-	DDV_MaxChars(pDX, m_sComStateTip, 32);
+	DDV_MaxChars(pDX, m_sComStateTip, 128);
 	DDX_Text(pDX, IDC_STATIC_FRAME_HEAD,        m_sFrameHead);   
-	DDV_MaxChars(pDX, m_sFrameHead,   32);
+	DDV_MaxChars(pDX, m_sFrameHead,   16);
 	DDX_Text(pDX, IDC_STATIC_FRAME_TAIL,		m_sFrameTail);   
-	DDV_MaxChars(pDX, m_sFrameTail,   32);
+	DDV_MaxChars(pDX, m_sFrameTail,   16);
 	DDX_Text(pDX, IDC_STATIC_FRAME_DISP,		m_sFrameDisp);   
 	DDV_MaxChars(pDX, m_sFrameDisp, 128);
 	DDX_Text(pDX, IDC_EDIT_CURWAVE_LEN,			m_wCurWaveLen);
@@ -128,6 +128,11 @@ void CCommSet::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 }
+
+#ifndef _DEBUG
+CCollectDoc* CCommSet:GetDocument()
+ { return (CCollectDoc*)m_pDocument; }
+#endif
 #endif //_DEBUG
 
 /////////////////////////////////////////////////////////////////////////////
@@ -161,10 +166,12 @@ void CCommSet::OnButtonCommApply()
     	theCom.setDataBits(databits );
 		theCom.setStopBit( stopbits );
 		theCom.setParity(  parity   );
-        theCom.SaveComToIni();                // 保存参数
 
-		theCom.StartMonitoring();           // 启动串口线程
-        m_sComStateTip = "串口打开成功\n配置已保存!";
+        theCom.SaveComToIni();                // 保存参数
+		
+		theCom.StartMonitoring();             // 启动串口线程
+        
+		m_sComStateTip = "串口打开成功\n配置已保存!";
 
 	}
 	else	               

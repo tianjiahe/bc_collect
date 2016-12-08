@@ -543,18 +543,6 @@ void CGraphicView::CreateSimpleGraph()
 void CGraphicView::OnTimer(UINT nIDEvent) 
 {
 	// TODO: Add your message handler code here and/or call default
-	CString ttext;  
-	double  newx2;
-	float   YData[250];
-	double  XData[250]; 
-	double  dx; 
-	CTime   t;
-	TM      petm; 
-
-	if (nIDEvent = 2)
-	{
-		;
-	}
 
 	CView::OnTimer(nIDEvent);
 

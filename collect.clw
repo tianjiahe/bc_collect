@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CCommSet
-LastTemplate=CDialog
+LastClass=CIntListView
+LastTemplate=CEdit
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "collect.h"
 LastPage=0
 
-ClassCount=21
+ClassCount=22
 Class1=CCmdToolBar
 Class2=CCollectApp
 Class3=CAboutDlg
@@ -32,21 +32,22 @@ Class20=CTypedPtrListView
 Class21=CTypedPtrMapView
 
 ResourceCount=16
-Resource1=IDD_ABOUTBOX
-Resource2=IDD_DIALOG_USER
-Resource3=IDD_TYPED_PTR_LIST (English (U.S.))
-Resource4=IDD_STRING_LIST
-Resource5=IDD_MAP_DWORD_TO_MYSTRUCT (English (U.S.))
-Resource6=IDD_POINT_ARRAY (English (U.S.))
-Resource7=IDD_TYPED_PTR_ARRAY
-Resource8=IDR_MAINFRAME
-Resource9=IDD_DWORD_ARRAY
-Resource10=IDD_TYPED_PTR_MAP (English (U.S.))
-Resource11=IDD_DIALOG_COM
-Resource12=IDD_DIALOG_OPERATE_TOOLBAR
-Resource13=IDD_MAP_STRING_TO_STRING (English (U.S.))
-Resource14=IDD_DIALOG_COMMAND_TOOLBAR
-Resource15=IDD_INT_LIST
+Resource1=IDD_TYPED_PTR_MAP (English (U.S.))
+Resource2=IDD_STRING_LIST
+Resource3=IDD_DIALOG_COM
+Resource4=IDD_MAP_DWORD_TO_MYSTRUCT (English (U.S.))
+Resource5=IDD_DIALOG_COMMAND_TOOLBAR
+Resource6=IDD_INT_LIST
+Resource7=IDD_DIALOG_OPERATE_TOOLBAR
+Resource8=IDD_POINT_ARRAY (English (U.S.))
+Resource9=IDD_TYPED_PTR_LIST (English (U.S.))
+Resource10=IDD_MAP_STRING_TO_STRING (English (U.S.))
+Resource11=IDD_DWORD_ARRAY
+Resource12=IDD_DIALOG_USER
+Resource13=IDD_ABOUTBOX
+Resource14=IDR_MAINFRAME
+Resource15=IDD_TYPED_PTR_ARRAY
+Class22=CBinEdit
 Resource16=IDR_MAINFRAME (English (U.S.))
 
 [CLS:CCmdToolBar]
@@ -115,7 +116,9 @@ Type=0
 BaseClass=CFormView
 HeaderFile=intlstvw.h
 ImplementationFile=intlstvw.cpp
-LastObject=CIntListView
+LastObject=IDC_EDIT_TEST
+Filter=D
+VirtualFilter=VWC
 
 [CLS:CMainFrame]
 Type=0
@@ -296,22 +299,33 @@ Control18=IDC_CHECK4,button,1342242819
 [DLG:IDD_INT_LIST]
 Type=1
 Class=CIntListView
-ControlCount=15
-Control1=IDC_ELEMENT,edit,1350631552
-Control2=IDC_LIST,listbox,1352728833
-Control3=IDC_ADD,button,1342242817
-Control4=IDC_INSERT_BEFORE,button,1342242816
-Control5=IDC_UPDATE,button,1342242816
-Control6=IDC_REMOVE,button,1342242816
-Control7=IDC_REMOVE_ALL,button,1342242816
-Control8=IDC_STATIC,static,1342308352
-Control9=IDC_STATIC,static,1342308352
-Control10=IDC_STATIC,static,1342308364
-Control11=IDC_STATIC,static,1342308352
-Control12=IDC_STATIC,static,1342308352
-Control13=IDC_STATIC,static,1342308352
-Control14=IDC_COMBO1,combobox,1344340226
-Control15=IDC_COMBO2,combobox,1344340226
+ControlCount=26
+Control1=IDC_STATIC,static,1342308352
+Control2=IDC_STATIC,static,1342308352
+Control3=IDC_STATIC,static,1342308364
+Control4=IDC_STATIC,static,1342308352
+Control5=IDC_STATIC,static,1342308352
+Control6=IDC_STATIC,static,1342308352
+Control7=IDC_EDIT_TEST,edit,1350639616
+Control8=IDC_EDIT_OUTPUT,edit,1350633600
+Control9=IDC_EDIT_COLLECT,edit,1350633600
+Control10=IDC_BTN_COLLECT,button,1342242816
+Control11=IDC_BTN_TEST_,button,1342242816
+Control12=IDC_STATIC,button,1342177287
+Control13=IDC_STATIC,button,1342177287
+Control14=IDC_CMB_WAVELEN,combobox,1344339970
+Control15=IDC_CMB_SPEED,combobox,1344339971
+Control16=IDC_SPIN_WAVELEN_OFFSET,msctls_updown32,1342177312
+Control17=IDC_CMB_WAVELEN_OFFSET,combobox,1344339970
+Control18=IDC_BTN_RESET,button,1342242816
+Control19=IDC_BTN_STOP,button,1342242816
+Control20=IDC_STATIC,button,1342177287
+Control21=IDC_BTN_WAVELEN_GOTO,button,1342242816
+Control22=IDC_BTN_SPEED_SET,button,1342242816
+Control23=IDC_EDIT_CURWAVELEN,edit,1350633600
+Control24=IDC_STATIC,button,1342177287
+Control25=IDC_EDIT_ONLINE,edit,1350633600
+Control26=IDC_LIST2,SysListView32,1350631425
 
 [DLG:IDD_MAP_DWORD_TO_MYSTRUCT]
 Type=1
@@ -545,4 +559,13 @@ Command12=ID_EDIT_PASTE
 Command13=ID_NEXT_PANE
 Command14=ID_PREV_PANE
 CommandCount=14
+
+[CLS:CBinEdit]
+Type=0
+HeaderFile=BinEdit.h
+ImplementationFile=BinEdit.cpp
+BaseClass=CEdit
+Filter=W
+VirtualFilter=WC
+LastObject=CBinEdit
 

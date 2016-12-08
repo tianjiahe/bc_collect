@@ -17,6 +17,9 @@
 #include <afxext.h>
 #endif
 
+#include <afxcmn.h>
+#include "BinEdit.h"
+
 class CIntListView : public CFormView
 {
 public:
@@ -35,8 +38,16 @@ public:
 public:
 	//{{AFX_DATA(CIntListView)
 	enum { IDD = IDD_INT_LIST };
-	CListBox    m_ctlList;
-	int     m_int;
+	CListCtrl	m_listArgs;
+	CBinEdit	m_oTest;
+	CComboBox	m_oWavelenOffset;
+	CComboBox	m_oWavelenSet;
+	CComboBox	m_oSpeedSet;
+	CString	m_sTest;
+	CString	m_sOutput;
+	CString	m_sOnLineState;
+	CString	m_sCurWavelen;
+	double	m_dCollectGet;
 	//}}AFX_DATA
 
 // Attributes
@@ -44,6 +55,9 @@ public:
 
 // Operations
 public:
+	void InitForm(void);
+	BOOL WaitforDone(int backCount );
+	int  m_nBackCount;
 
 // Overrides
 	// ClassWizard generate virtual function overrides
@@ -55,8 +69,6 @@ public:
 
 // Implementation
 protected:
-	BOOL FindInt(int& nSel, POSITION& pos);
-	void AddIntToListBox(int n, int nSel = -1);
 
 	virtual ~CIntListView();
 #ifdef _DEBUG
@@ -66,12 +78,14 @@ protected:
 
 	// Generated message map functions
 	//{{AFX_MSG(CIntListView)
-	afx_msg void OnAdd();
-	afx_msg void OnUpdate();
-	afx_msg void OnRemove();
-	afx_msg void OnRemoveAll();
-	afx_msg void OnSelChangeList();
-	afx_msg void OnInsertBefore();
+	afx_msg void OnBtnTest();
+	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnBtnCollect();
+	afx_msg void OnBtnSpeedSet();
+	afx_msg void OnBtnWavelenGoto();
+	afx_msg void OnDeltaposSpinWavelenOffset(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnBtnReset();
+	afx_msg void OnBtnStop();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
