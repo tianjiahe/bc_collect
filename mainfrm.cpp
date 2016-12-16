@@ -27,8 +27,8 @@
 #include "mapdwvw.h"
 #include "CommSet.h"
 
-#include "DlgUser.h"                  // 用户登录，注册对话框
-
+#include "DlgUser.h"                  // 用户登录
+#include "DlgNewUser.h"               // 注册对话框
 
 #include "GraphicView.h"              // 图形曲线视图
 #include "RealGraphView.h"            // 实时动态曲线视图
@@ -49,13 +49,14 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_STRINGLIST, ID_ON_REAL, OnUpdateExampleUI)
 	//{{AFX_MSG_MAP(CMainFrame)
 	ON_WM_CREATE()
-	ON_BN_CLICKED(IDC_BUTTON_DATA_SAVE, OnButtonDataSave)
-	ON_COMMAND(ID_VIEW_OPER_BAR, OnViewOperBar)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_OPER_BAR, OnUpdateViewOperBar)
-	ON_COMMAND(ID_MENU_USER, OnMenuUser)
-	ON_BN_CLICKED(IDC_CHECK_START_SCAN, OnCheckStartScan)
-	ON_BN_CLICKED(IDC_BUTTON1, OnButton1)
-	ON_COMMAND(ID_COMMSET, OnCommset)
+	ON_BN_CLICKED(IDC_BUTTON_DATA_SAVE,		OnButtonDataSave)
+	ON_COMMAND(ID_VIEW_OPER_BAR,			OnViewOperBar)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_OPER_BAR,	OnUpdateViewOperBar)
+	ON_COMMAND(ID_MENU_USER,				OnMenuUser)
+	ON_BN_CLICKED(IDC_CHECK_START_SCAN,		OnCheckStartScan)
+	ON_BN_CLICKED(IDC_BUTTON1,				OnButton1)
+	ON_COMMAND(ID_COMMSET,					OnCommset)
+	ON_COMMAND(ID_MENU_NEW_USER,            OnMenuNewUser)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -176,6 +177,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// CG: The following line was added by the Splash Screen component.
 	CSplashWnd::ShowSplashScreen(this);
 	Sleep(2000);
+
+	GetWindowText(m_sWinTitle);            // 保存窗口标题
 	
 	return 0;
 }
@@ -257,6 +260,8 @@ void CMainFrame::OnUpdateExampleUI(CCmdUI* pCmdUI)
 BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) 
 {
 	// TODO: Add your specialized code here and/or call the base class
+
+
 	if (m_wndOpBar.OnCmdMsg(nID,nCode,pExtra,pHandlerInfo))
 	{
         return  TRUE;
@@ -291,14 +296,7 @@ void CMainFrame::OnUpdateViewOperBar(CCmdUI* pCmdUI)
 	
 }
 
-// 打开用户登录，设置登录信息
-void CMainFrame::OnMenuUser() 
-{
-	// TODO: Add your command handler code here
-    CDlgUser   dlg;
-	if(dlg.DoModal()==IDOK)	{	MessageBox(_T("当前用户登录成功."));	}
-	else					{   MessageBox(_T("当前用户登录失败!"));	}
-}
+
 
 
 void CMainFrame::OnCheckStartScan() 
@@ -337,6 +335,10 @@ void CMainFrame::OnCommset()
 {
 	// TODO: Add your command handler code here
 	
+	// 权限检查
+	if( users.m_nRoal < 1 )  { MessageBox(" 当前用户无权限实施操作!"); return;  }
+
+
 	UINT nCmdID = ID_COMMSET; 
 		if ( nCmdID == m_nCurrentExample)                       // 菜单中选中一个不同的视图选项后
 		    return;                                                 // already selected
@@ -365,4 +367,85 @@ void CMainFrame::OnCommset()
 	}
 }
 
+
+// 打开用户登录，设置登录信息
+void CMainFrame::OnMenuUser() 
+{
+	// TODO: Add your command handler code here
+    CDlgUser   dlg;
+	if(dlg.DoModal()==IDOK)	
+	{
+		// 点击登录按钮返回
+       for (int i = 0; i < users.m_list.GetSize(); i++ )
+       {
+          if (users.m_list[i].username==dlg.m_sUsername)   
+		  {
+			  if  (users.m_list[i].password==dlg.m_sPassword)
+			  {
+				  // login OK
+				  SetWindowText(m_sWinTitle + "_用户:" + dlg.m_sUsername );
+				  users.m_sUser = dlg.m_sUsername;
+				  users.m_nRoal = dlg.m_nRoal;
+			  }
+			  else
+			  {
+				  MessageBox("用户密码错误!");
+			  }
+			  return;
+		  }
+       }
+
+
+	   // 系统管理员不在列表中登记，是超级用户 only one,用户名和密码写死
+       if ( (dlg.m_nRoal==2) && 
+		    (dlg.m_sUsername=="administrator") && 
+			(dlg.m_sPassword=="administrator") )
+       {
+		   users.m_sUser = dlg.m_sUsername;
+		   users.m_nRoal = dlg.m_nRoal;
+           SetWindowText(m_sWinTitle + "_用户:" + dlg.m_sUsername );
+		   return;
+       }
+	   
+	   MessageBox("用户权限未定义");
+	}
+
+	else
+	{
+		if ((users.m_nRoal==0) && users.m_sUser.IsEmpty() )
+		{
+			SetWindowText(m_sWinTitle);
+		}
+	}
+	
+}
+void CMainFrame::OnMenuNewUser()
+{
+	CDlgNewUser   dlg;
+	tagUser       user;
+
+	if(dlg.DoModal()==IDOK)
+	{
+
+		if (dlg.m_sNewUser.IsEmpty())          { MessageBox("用户名不能为空!"); return; }
+		if (dlg.m_sPassword!=dlg.m_sPassword2) { MessageBox("密码输入错误!");   return; }	
+		
+		user.username  = dlg.m_sNewUser;
+		user.password  = dlg.m_sPassword;
+		user.roalIndex = dlg.m_bIsAdmin; 
+
+		users.m_list.Add(user);
+        
+		users.Save();      // 保存用户权限信息
+        int ret = MessageBox("欢迎新用户:\n"+ dlg.m_sNewUser+"\n 是否用当前用户登录?","是否登录",MB_ICONQUESTION|MB_OKCANCEL  );
+		if(ret==IDOK)
+		{
+		   users.m_sUser = dlg.m_sNewUser;
+		   users.m_nRoal = dlg.m_bIsAdmin;
+		}
+		
+	}
+
+	
+}
 

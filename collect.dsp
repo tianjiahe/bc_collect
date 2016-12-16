@@ -119,6 +119,10 @@ SOURCE=.\CommSet.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\DlgNewUser.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\DlgUser.cpp
 # End Source File
 # Begin Source File
@@ -225,6 +229,10 @@ SOURCE=.\CommSet.h
 # Begin Source File
 
 SOURCE=.\CSPVC.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DlgNewUser.h
 # End Source File
 # Begin Source File
 

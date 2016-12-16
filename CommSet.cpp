@@ -26,20 +26,20 @@ CCommSet::CCommSet()
 	//{{AFX_DATA_INIT(CCommSet)
 	m_nComPort     = -1;
 	m_nCommRate    = -1;
-	m_bCommFlow = FALSE;
-	m_nDataBits = -1;                   //  ref to  combox serial num 
+	m_bCommFlow    = FALSE;
+	m_nDataBits    = -1;                   //  ref to  combox serial num 
 	m_sComStateTip = _T("串口状态");
-	m_sFrameHead = _T("");
-	m_sFrameTail = _T("");
+	m_sFrameHead   = _T("");
+	m_sFrameTail   = _T("");
 	m_sFrameDisp   = _T("帧数据显示");
-	m_wCurWaveLen = 0;
-	m_wAngle      = 0;
-	m_wStartAngle = 0;
-	m_wEndAngle   = 0;
-	m_wUseWaveLen = 0;
-	m_bFrameChk   = 0;
-	m_bStepLen    = 0;
-	m_bClockWise  = FALSE;
+	m_wCurWaveLen  = 0;
+	m_wAngle       = 0;
+	m_wStartAngle  = 0;
+	m_wEndAngle    = 0;
+	m_wUseWaveLen  = 0;
+	m_bFrameChk    = 0;
+	m_bStepLen     = 0;
+	m_bClockWise   = FALSE;
 	m_sRxDisp = _T("");
 	//}}AFX_DATA_INIT
 
@@ -51,8 +51,6 @@ CCommSet::CCommSet()
     m_sFrameHead = str;
     str.Format("0x%02XH",thePtl.getFrameTail() );
 	m_sFrameTail = str;
-   
-
 }
 
 CCommSet::~CCommSet()

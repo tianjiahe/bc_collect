@@ -37,6 +37,7 @@ public:
 
 // Implementation
 public:
+	CString m_sWinTitle;
 	BOOL m_bIsScan;
 	virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -62,6 +63,7 @@ protected:
 	afx_msg void OnCheckStartScan();
 	afx_msg void OnButton1();
 	afx_msg void OnCommset();
+	afx_msg void OnMenuNewUser();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

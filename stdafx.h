@@ -32,4 +32,6 @@
 
 #define  CONFIG_FILE	"BC.ini"      //系统配置文件名称
 
+
+
 #pragma comment(lib, "CSPVC.lib")

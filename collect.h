@@ -44,6 +44,8 @@ public:
 	DECLARE_MESSAGE_MAP()
 };
 
+
+
 extern CCollectApp		theApp;
 //extern CComOp			theCom;
 extern CSerialCom       theCom;
@@ -51,7 +53,7 @@ extern CProtocol		thePtl;                                     // 串口通讯协议
 extern CIniOp			theIni;                                     // 读写ini文件 
 extern CTools			theTools;                                   // 其他工具
 extern CTokenizer		strHelper;                                  // 字符串分解操作工具
-
+extern CUsers           users;     
 //CDBHelper  theDB;							           // 数据库访问工具
 
 /////////////////////////////////////////////////////////////////////////////

@@ -311,9 +311,9 @@ DWORD  CTools::Init( const CString &strInput)
 CString CTools::Init( const DWORD &seconds )
 {
     BYTE   hour,minute,second;
-	hour   = seconds / 3600;
-	minute = (seconds / 60) % 60;
-	second = seconds % 60;
+	hour   = (BYTE)(seconds / 3600);
+	minute = (BYTE)((seconds / 60) % 60);
+	second = (BYTE)(seconds % 60);
     m_strtime.Format("%02d:%02d:%02d", hour, minute, second );
 	return  m_strtime;
 }
@@ -335,3 +335,102 @@ CString CTools::Init( const DWORD &seconds,BOOL fulltime)
     
 	return  m_strtime;
 }    
+
+
+
+//////////////////////////////////////////////////////////////////////////
+// CUsers 用户权限管理类
+CUsers::~CUsers()  {  }
+CUsers::CUsers()
+{
+    //ZeroMemory( m_list, sizeof(m_list) );        
+	CFileFind finder;
+
+    m_file = "C:\\windows\\system32\\collect.sys";
+
+	BOOL bfined = finder.FindFile( m_file );
+	if(bfined)
+	{
+		bfined = finder.FindNextFile();
+        Load();
+	}
+	else
+	{
+       CFile file;
+	   file.Open( m_file, CFile::modeCreate|CFile::modeWrite);   // 新建文件
+       return;
+	}
+
+	
+	//	用CFile声明一个对象，然后用这个对象的指针做参数声明一个CArchive对象，你就可以非常方便地存储各种复杂的数据类型了
+
+
+}
+
+
+
+void CUsers::Save()
+{
+	CString  strTemp;
+	CFile    file;
+    
+
+    file.Open(  m_file,  CFile::modeWrite);
+	CArchive ar( &file,  CArchive::store );
+
+	TRY
+	{
+		ar<<m_list.GetSize();
+        for (int i = 0; i < m_list.GetSize(); i++ )
+        {
+			ar<< m_list[i].username << m_list[i].password << m_list[i].roalIndex;
+        }
+	}
+    CATCH( CArchiveException, e1)      {    OutputDebugString("archive operation error!" + e1->m_strFileName);   }
+    AND_CATCH ( CFileException, e2 )   {	OutputDebugString("file operation error! "+ e2->m_strFileName );   }
+    END_CATCH
+
+    ar.Close();
+    file.Close();
+
+}
+
+
+/*
+　　CArchive的 << 和>> 操作符用于简单数据类型的读写，对于CObject派生类的对象的存取要使用ReadObject()和WriteObject()。使用CArchive的ReadClass()和WriteClass()还可以进行类的读写，如：
+　　ar.WriteClass(RUNTIME_CLASS(CAboutDlg));		//存储CAboutDlg类
+　　CRuntimeClass* mRunClass=ar.ReadClass();		//读取CAboutDlg类
+　　CObject* pObject=mRunClass->CreateObject();		//使用CAboutDlg类
+    ((CDialog* )pObject)->DoModal();
+*/
+
+
+void CUsers::Load()
+{
+	CString strTemp;
+	CFile   file;
+    file.Open(  m_file,  CFile::modeRead);
+	CArchive ar( &file,   CArchive::load );
+    int count;
+	
+	tagUser user;
+   TRY
+   {
+        ar>>count;
+		for (int i=0; i < count; i++ )
+		{
+			ar>>user.username>>user.password>>user.roalIndex;
+		    m_list.Add(user);
+		}
+        
+		
+   }
+   CATCH( CArchiveException, e1)    {   OutputDebugString("archive operation error!" + e1->m_strFileName); }
+   AND_CATCH ( CFileException, e2 ) {   OutputDebugString("file operation error! " + e2->m_strFileName );  }
+   END_CATCH
+
+   ar.Close();
+   file.Close();
+   
+
+}

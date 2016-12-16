@@ -19,7 +19,10 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CDlgUser)
 	enum { IDD = IDD_DIALOG_USER };
-		// NOTE: the ClassWizard will add data members here
+	CComboBox	m_oUsers;
+	int		m_nRoal;
+	CString	m_sPassword;
+	CString	m_sUsername;
 	//}}AFX_DATA
 
 
@@ -35,7 +38,9 @@ protected:
 
 	// Generated message map functions
 	//{{AFX_MSG(CDlgUser)
-		// NOTE: the ClassWizard will add member functions here
+	virtual BOOL OnInitDialog();
+	afx_msg void OnSelchangeCmbRoal();
+	afx_msg void OnBtnUserLoginout();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

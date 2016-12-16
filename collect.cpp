@@ -53,14 +53,14 @@ CCollectApp::CCollectApp()
 
 //CComOp         theCom;                                     // 串口通讯缓存对象
 
-CSerialCom    theCom;
+CSerialCom     theCom;
 //
 
 CProtocol      thePtl;                                     // 串口通讯协议
 CIniOp         theIni;                                     // 读写ini文件 
 CTools         theTools;                                   // 其他工具
 CTokenizer     strHelper;                                  // 字符串分解操作工具
-
+CUsers         users;                                       // 用户和权限信息加载
 
 
 CCollectApp theApp;

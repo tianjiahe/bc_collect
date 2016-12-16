@@ -74,5 +74,33 @@ private:
 //	DWORD     m_dwSeconds;
 };
 
+// 默认未登录人员不可以操作，此权限有管理员控制，
+// 程序启动时使用一个默认的  user用户，无密码，权限是操作员，用管理员权限可以设置为禁用并保持
+#define  USER_MAX       32            // 最多用户应数量
+char * roal[2] = {"管理员","操作员"};
+ 
+typedef struct User
+{
+	CString username;
+	CString password;
+	int     roalIndex;             // 角色编号 0-管理员，1-操作员
+}tagUser;
 
+class CUsers
+{
+public:
+	CUsers();
+	virtual ~CUsers();
+
+public:	
+	//tagUser  m_list[USER_MAX];
+	CArray<tagUser, tagUser>        m_list; 
+	CString  m_file;                    // 写配置文件
+    CString  m_sUser;                   // 当前用户
+	int      m_nRoal;                   // 当前用户权限
+
+void Save( void );
+void Load( void );
+
+};
 #endif // !defined(AFX_INIOP_H__754C77D5_7CD1_46A1_8457_07734A1E7FE2__INCLUDED_)

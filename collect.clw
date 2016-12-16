@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CIntListView
-LastTemplate=CEdit
+LastClass=CDlgNewUser
+LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "collect.h"
 LastPage=0
 
-ClassCount=22
+ClassCount=23
 Class1=CCmdToolBar
 Class2=CCollectApp
 Class3=CAboutDlg
@@ -31,24 +31,26 @@ Class19=CTypedPtrArrayView
 Class20=CTypedPtrListView
 Class21=CTypedPtrMapView
 
-ResourceCount=16
-Resource1=IDD_TYPED_PTR_MAP (English (U.S.))
-Resource2=IDD_STRING_LIST
-Resource3=IDD_DIALOG_COM
-Resource4=IDD_MAP_DWORD_TO_MYSTRUCT (English (U.S.))
+ResourceCount=17
+Resource1=IDD_MAP_STRING_TO_STRING (English (U.S.))
+Resource2=IDD_INT_LIST
+Resource3=IDD_STRING_LIST
+Resource4=IDD_DIALOG_OPERATE_TOOLBAR
 Resource5=IDD_DIALOG_COMMAND_TOOLBAR
-Resource6=IDD_INT_LIST
-Resource7=IDD_DIALOG_OPERATE_TOOLBAR
-Resource8=IDD_POINT_ARRAY (English (U.S.))
-Resource9=IDD_TYPED_PTR_LIST (English (U.S.))
-Resource10=IDD_MAP_STRING_TO_STRING (English (U.S.))
-Resource11=IDD_DWORD_ARRAY
-Resource12=IDD_DIALOG_USER
-Resource13=IDD_ABOUTBOX
-Resource14=IDR_MAINFRAME
-Resource15=IDD_TYPED_PTR_ARRAY
+Resource6=IDR_MAINFRAME
+Resource7=IDD_TYPED_PTR_MAP (English (U.S.))
+Resource8=IDD_DWORD_ARRAY
+Resource9=IDD_ABOUTBOX
+Resource10=IDD_TYPED_PTR_ARRAY
+Resource11=IDD_TYPED_PTR_LIST (English (U.S.))
+Resource12=IDD_MAP_DWORD_TO_MYSTRUCT (English (U.S.))
+Resource13=IDD_DIALOG_NEW_USER
+Resource14=IDD_DIALOG_USER
+Resource15=IDD_POINT_ARRAY (English (U.S.))
 Class22=CBinEdit
-Resource16=IDR_MAINFRAME (English (U.S.))
+Resource16=IDD_DIALOG_COM
+Class23=CDlgNewUser
+Resource17=IDR_MAINFRAME (English (U.S.))
 
 [CLS:CCmdToolBar]
 Type=0
@@ -98,6 +100,9 @@ Type=0
 BaseClass=CDialog
 HeaderFile=DlgUser.h
 ImplementationFile=DlgUser.cpp
+Filter=D
+VirtualFilter=dWC
+LastObject=CDlgUser
 
 [CLS:CDWordArrayView]
 Type=0
@@ -125,6 +130,9 @@ Type=0
 BaseClass=CFrameWnd
 HeaderFile=mainfrm.h
 ImplementationFile=mainfrm.cpp
+LastObject=ID_FILE_SAVE
+Filter=T
+VirtualFilter=fWC
 
 [CLS:CMapDWordToMyStructView]
 Type=0
@@ -144,6 +152,7 @@ Type=0
 BaseClass=CDialogBar
 HeaderFile=OperteToolBar.h
 ImplementationFile=OperteToolBar.cpp
+LastObject=IDC_BUTTON1
 
 [CLS:CPointArrayView]
 Type=0
@@ -263,15 +272,18 @@ Control46=IDC_EDIT_RX_DATA,edit,1352728644
 [DLG:IDD_DIALOG_USER]
 Type=1
 Class=CDlgUser
-ControlCount=8
+ControlCount=11
 Control1=IDOK,button,1342242817
 Control2=IDCANCEL,button,1342242816
 Control3=IDC_STATIC,static,1342177294
-Control4=IDC_COMBO1,combobox,1344340226
+Control4=IDC_CMB_USER,combobox,1344340226
 Control5=IDC_STATIC,static,1342308352
 Control6=IDC_STATIC,static,1342308352
-Control7=IDC_EDIT1,edit,1350639776
+Control7=IDC_EDIT1_USER_PASSWORD,edit,1350631584
 Control8=IDC_STATIC,static,1342308364
+Control9=IDC_STATIC,static,1342308352
+Control10=IDC_CMB_ROAL,combobox,1344339971
+Control11=IDC_BTN_USER_LOGINOUT,button,1342242816
 
 [DLG:IDD_DWORD_ARRAY]
 Type=1
@@ -507,39 +519,40 @@ Control14=IDC_STATIC,static,1342308352
 
 [MNU:IDR_MAINFRAME]
 Type=1
-Class=?
-Command1=ID_FILE_NEW
-Command2=ID_FILE_OPEN
-Command3=ID_FILE_SAVE
-Command4=ID_FILE_SAVE_AS
-Command5=ID_FILE_PRINT
-Command6=ID_FILE_PRINT_PREVIEW
-Command7=ID_FILE_PRINT_SETUP
-Command8=ID_FILE_MRU_FILE1
-Command9=ID_APP_EXIT
-Command10=ID_EDIT_UNDO
-Command11=ID_EDIT_CUT
-Command12=ID_EDIT_COPY
-Command13=ID_EDIT_PASTE
-Command14=ID_STRINGLIST
-Command15=ID_TYPEDLIST
-Command16=ID_INTLIST
-Command17=ID_DWORDARRAY
-Command18=ID_TYPEDPTRARRAY
-Command19=ID_POINTARRAY
-Command20=ID_MAPSTRINGTOSTRING
-Command21=ID_TYPEDPTRMAP
-Command22=ID_MAPDWORDTOMYSTRUCT
-Command23=ID_COMMSET
-Command24=ID_VIEW_TOOLBAR
-Command25=ID_VIEW_STATUS_BAR
-Command26=ID_VIEW_OPER_BAR
-Command27=ID_ON_REAL
-Command28=ID_GRAPH_VIEW
-Command29=ID_MENU_USER
-Command30=ID_APP_ABOUT
-Command31=ID_TEST
-CommandCount=31
+Class=CDlgNewUser
+Command1=ID_MENU_USER
+Command2=ID_MENU_NEW_USER
+Command3=ID_FILE_NEW
+Command4=ID_FILE_OPEN
+Command5=ID_FILE_SAVE
+Command6=ID_FILE_SAVE_AS
+Command7=ID_FILE_PRINT
+Command8=ID_FILE_PRINT_PREVIEW
+Command9=ID_FILE_PRINT_SETUP
+Command10=ID_FILE_MRU_FILE1
+Command11=ID_APP_EXIT
+Command12=ID_EDIT_UNDO
+Command13=ID_EDIT_CUT
+Command14=ID_EDIT_COPY
+Command15=ID_EDIT_PASTE
+Command16=ID_STRINGLIST
+Command17=ID_TYPEDLIST
+Command18=ID_INTLIST
+Command19=ID_DWORDARRAY
+Command20=ID_TYPEDPTRARRAY
+Command21=ID_POINTARRAY
+Command22=ID_MAPSTRINGTOSTRING
+Command23=ID_TYPEDPTRMAP
+Command24=ID_MAPDWORDTOMYSTRUCT
+Command25=ID_COMMSET
+Command26=ID_VIEW_TOOLBAR
+Command27=ID_VIEW_STATUS_BAR
+Command28=ID_VIEW_OPER_BAR
+Command29=ID_ON_REAL
+Command30=ID_GRAPH_VIEW
+Command31=ID_APP_ABOUT
+Command32=ID_TEST
+CommandCount=32
 
 [ACL:IDR_MAINFRAME (English (U.S.))]
 Type=1
@@ -568,4 +581,27 @@ BaseClass=CEdit
 Filter=W
 VirtualFilter=WC
 LastObject=CBinEdit
+
+[DLG:IDD_DIALOG_NEW_USER]
+Type=1
+Class=CDlgNewUser
+ControlCount=9
+Control1=IDOK,button,1342242817
+Control2=IDCANCEL,button,1342242816
+Control3=IDC_CHK_REG_ROAL,button,1342242819
+Control4=IDC_EDIT_NEWUSER,edit,1350631552
+Control5=IDC_EDIT_PASSWORD,edit,1350631584
+Control6=IDC_EDIT_PASSWORD2,edit,1350631584
+Control7=IDC_STATIC,static,1342308352
+Control8=IDC_STATIC,static,1342308352
+Control9=IDC_STATIC,static,1342308352
+
+[CLS:CDlgNewUser]
+Type=0
+HeaderFile=DlgNewUser.h
+ImplementationFile=DlgNewUser.cpp
+BaseClass=CDialog
+Filter=D
+LastObject=CDlgNewUser
+VirtualFilter=dWC
 
