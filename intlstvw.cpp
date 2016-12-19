@@ -40,6 +40,7 @@ CIntListView::CIntListView()
 
 CIntListView::~CIntListView()
 {
+	CCloseDev();
 }
 
 void CIntListView::OnInitialUpdate()
@@ -64,6 +65,7 @@ void CIntListView::OnInitialUpdate()
 
     InitForm();
 	
+	SetTimer(1,1000,NULL);
 
 }
 
@@ -165,8 +167,7 @@ void CIntListView::OnTimer(UINT nIDEvent)
 	// TODO: Add your message handler code here and/or call default
     if (nIDEvent==1)
     {
-		// "USB未连接,USB未初始化";
-      	if(!CUsbLinked())
+	  	if(!CUsbLinked())
 		{
 			m_sOnLineState = "USB未连接,USB未初始化";//		return;
 		}
@@ -178,15 +179,13 @@ void CIntListView::OnTimer(UINT nIDEvent)
 				COpenDev();
 				if(CDevInit())
 				{
-                    m_sOnLineState = "USB已连接,USB已初始化";
-                    // 下位机连接成功，取下位机的数据，显示在控件上
+                    m_sOnLineState = "USB已连接,USB已初始化";    // 下位机连接成功，取下位机的数据，显示在控件上
 					InitForm();
-             		UpdateData(FALSE);
-					SetTimer(2,20,NULL);			//定时器2一定要在GDevInit()之后打开    
+					SetTimer(2,20,NULL);			             //定时器2一定要在GDevInit()之后打开    
 				}
 			}
-			//return;
 		}
+	    UpdateData(FALSE);
     }
 
 	
@@ -319,7 +318,7 @@ void CIntListView::OnBtnStop()
 	CStop();
 }
 
-//
+
 void CIntListView::InitForm()
 {
 //	if     ( G1 == 0) 		    m_arg5 = "无";

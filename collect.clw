@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CDlgNewUser
+LastClass=CIntListView
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "collect.h"
@@ -32,23 +32,23 @@ Class20=CTypedPtrListView
 Class21=CTypedPtrMapView
 
 ResourceCount=17
-Resource1=IDD_MAP_STRING_TO_STRING (English (U.S.))
-Resource2=IDD_INT_LIST
-Resource3=IDD_STRING_LIST
-Resource4=IDD_DIALOG_OPERATE_TOOLBAR
-Resource5=IDD_DIALOG_COMMAND_TOOLBAR
-Resource6=IDR_MAINFRAME
-Resource7=IDD_TYPED_PTR_MAP (English (U.S.))
-Resource8=IDD_DWORD_ARRAY
-Resource9=IDD_ABOUTBOX
-Resource10=IDD_TYPED_PTR_ARRAY
-Resource11=IDD_TYPED_PTR_LIST (English (U.S.))
-Resource12=IDD_MAP_DWORD_TO_MYSTRUCT (English (U.S.))
-Resource13=IDD_DIALOG_NEW_USER
-Resource14=IDD_DIALOG_USER
-Resource15=IDD_POINT_ARRAY (English (U.S.))
+Resource1=IDD_DIALOG_OPERATE_TOOLBAR
+Resource2=IDD_DWORD_ARRAY
+Resource3=IDD_MAP_DWORD_TO_MYSTRUCT (English (U.S.))
+Resource4=IDD_INT_LIST
+Resource5=IDD_ABOUTBOX
+Resource6=IDD_TYPED_PTR_LIST (English (U.S.))
+Resource7=IDD_MAP_STRING_TO_STRING (English (U.S.))
+Resource8=IDD_TYPED_PTR_ARRAY
+Resource9=IDD_DIALOG_NEW_USER
+Resource10=IDD_DIALOG_USER
+Resource11=IDD_DIALOG_COM
+Resource12=IDR_MAINFRAME
+Resource13=IDD_TYPED_PTR_MAP (English (U.S.))
+Resource14=IDD_STRING_LIST
+Resource15=IDD_DIALOG_COMMAND_TOOLBAR
 Class22=CBinEdit
-Resource16=IDD_DIALOG_COM
+Resource16=IDD_POINT_ARRAY (English (U.S.))
 Class23=CDlgNewUser
 Resource17=IDR_MAINFRAME (English (U.S.))
 
@@ -121,7 +121,7 @@ Type=0
 BaseClass=CFormView
 HeaderFile=intlstvw.h
 ImplementationFile=intlstvw.cpp
-LastObject=IDC_EDIT_TEST
+LastObject=CIntListView
 Filter=D
 VirtualFilter=VWC
 

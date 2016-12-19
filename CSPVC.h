@@ -103,7 +103,7 @@ extern "C" {
 	extern CSP_API double NowWave;						//仪器当前的波长值
 
 
-	extern CSP_API BOOL WINAPI CUsbLinked(void);							//建立USB连接
+	extern CSP_API BOOL WINAPI CUsbLinked(void);						//建立USB连接
 	extern CSP_API void WINAPI COpenDev(void);							//打开设备
 	extern CSP_API void WINAPI CCloseDev(void);							//关闭与设备的连接
 	extern CSP_API void WINAPI CSendCmd(UCHAR cmd);						//向设备发送命令，参数cmd:命令（一个字节,无符号字符）					
