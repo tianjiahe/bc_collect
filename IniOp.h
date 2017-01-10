@@ -1,6 +1,18 @@
 // IniOp.h: interface for the CIniOp class.
 //
 //////////////////////////////////////////////////////////////////////
+/********************************************************************
+	created:	2016/12/21
+	created:	21:12:2016   10:15
+	filename: 	D:\kinggsoft\IniOp.h
+	file path:	D:\kinggsoft
+	file base:	IniOp
+	file ext:	h
+	author:		
+	
+	purpose:    工具类，包括ini 配置文件操作、字符串分割、日期时间格式化
+	            用户和权限的管理
+*********************************************************************/
 
 #if !defined(AFX_INIOP_H__754C77D5_7CD1_46A1_8457_07734A1E7FE2__INCLUDED_)
 #define AFX_INIOP_H__754C77D5_7CD1_46A1_8457_07734A1E7FE2__INCLUDED_

@@ -30,12 +30,12 @@ CSerialPort::CSerialPort()
 	m_hComm = NULL;
 
 	// initialize overlapped structure members to zero
-	m_ov.Offset = 0;
+	m_ov.Offset     = 0;
 	m_ov.OffsetHigh = 0;
 
 	// create events
-	m_ov.hEvent = NULL;
-	m_hWriteEvent = NULL;
+	m_ov.hEvent      = NULL;
+	m_hWriteEvent    = NULL;
 	m_hShutdownEvent = NULL;
 
 	m_szWriteBuffer = NULL;
@@ -83,18 +83,18 @@ BOOL CSerialPort::InitPort(CWnd* pPortOwner,	// the owner (CWnd) of the port (re
 		TRACE("Thread ended\n");
 	}
 
-	// create events
+	// create events,return event handle
 	if (m_ov.hEvent != NULL)
 		ResetEvent(m_ov.hEvent);
-	m_ov.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	m_ov.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);       // overlap event
 
 	if (m_hWriteEvent != NULL)
 		ResetEvent(m_hWriteEvent);
-	m_hWriteEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	m_hWriteEvent = CreateEvent(NULL, TRUE, FALSE, NULL);    //  writeEvent
 	
 	if (m_hShutdownEvent != NULL)
 		ResetEvent(m_hShutdownEvent);
-	m_hShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	m_hShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);  // shutdownEvent 
 
 	// initialize the event objects
 	m_hEventArray[0] = m_hShutdownEvent;	// highest priority
@@ -506,10 +506,10 @@ void CSerialPort::WriteChar(CSerialPort* port,int length)
 //
 void CSerialPort::ReceiveChar(CSerialPort* port, COMSTAT comstat)
 {
-	BOOL  bRead = TRUE; 
-	BOOL  bResult = TRUE;
-	DWORD dwError = 0;
-	DWORD BytesRead = 0;
+	BOOL  bRead      = TRUE; 
+	BOOL  bResult    = TRUE;
+	DWORD dwError    = 0;
+	DWORD BytesRead  = 0;
 	unsigned char RXBuff;
 
 	for (;;) 

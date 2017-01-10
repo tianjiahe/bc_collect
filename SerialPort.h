@@ -13,6 +13,17 @@
 **
 **
 */
+/********************************************************************
+	created:	2016/12/21
+	created:	21:12:2016   10:35
+	filename: 	D:\kinggsoft\SerialPort.h
+	file path:	D:\kinggsoft
+	file base:	SerialPort
+	file ext:	h
+	author:		
+	
+	purpose:	使用开源串口源码，使用多线程方式接收数据，
+*********************************************************************/
 
 #ifndef __SERIALPORT_H__
 #define __SERIALPORT_H__
