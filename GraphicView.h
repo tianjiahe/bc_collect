@@ -44,7 +44,12 @@ public:
 // Implementation
 protected:
 	virtual ~CGraphicView();
+    void InitDrawGraph();
+	void LoadData2Draw();
+	void LoadDrawFile();
+
 	void OnDrawgraph();
+
 	void CreateSimpleSGraph();
 	void CreateSimpleGraph();
 #ifdef _DEBUG
@@ -60,6 +65,7 @@ protected:
 	afx_msg void OnTimer(UINT nIDEvent);
 	afx_msg void OnTest();
 	afx_msg void OnButtonDataSave();
+	afx_msg void OnButtonDataLoad();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

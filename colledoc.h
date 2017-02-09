@@ -10,6 +10,9 @@
 // See these sources for detailed information regarding the
 // Microsoft Foundation Classes product.
 
+
+
+
 class CMyStruct
 {
 // Attributes
@@ -43,8 +46,8 @@ public:
 
 // Attributes
 public:
-	int m_int;
-	float m_float;
+	int     m_int;
+	float   m_float;
 	CString m_str;
 
 // Operations
@@ -58,36 +61,19 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// 波长、透射百分比参数，用于在二维坐标系统图形化呈现数据
-//////////////////////////////////////////////////////////////////////////
-
-class CWaveTransObj : public CObject
+class CurvePoint
 {
 public:
-	CWaveTrans();
-	DECLARE_SERIAL(CWaveTransObj);
-
-// Attributes
-public:
-	WORD   m_dwWaveLen;
-	WORD   m_dwTransPercent;
-
-// Operations
-public:
-	virtual ~CWaveTransObj();
-	virtual void Serialize(CArchive& ar);
-
+   float  newy,newx;
+   int    snum;
 };
 
-typedef CMap<WORD,WORD,CWaveTransObj*,CWaveTransObj*&>  CMapWaveTrans;      //
-
-
-
+typedef CList<CurvePoint,CurvePoint>                    CMyCurveList;
 typedef CTypedPtrList<CPtrList, CMyStruct*>             CMyStructList;
 typedef CTypedPtrArray<CObArray,CMyObject*>             CMyObjectArray;
 typedef CTypedPtrMap<CMapStringToOb,CString,CMyObject*> CMapStringToMyObject;
 typedef CMap<DWORD,DWORD,CMyStruct*,CMyStruct*&>        CMapDWordToMyStruct;
+
 
 
 class CCollectDoc : public CDocument
@@ -108,7 +94,10 @@ public:
 	CMapStringToMyObject	m_mapStringToMyObject;
 	CMapDWordToMyStruct		m_mapDWordToMyStruct;
 
-
+	CMyCurveList            m_CurveRealList;                 // 实际工作曲线
+	CMyCurveList            m_CurveUpList;                   // 曲线合格上限
+    CMyCurveList            m_CurveDownList;                 // 曲线合格下限
+	
 // Operations
 
 // Overrides
@@ -121,6 +110,8 @@ public:
 
 // Implementation
 public:
+	BOOL m_bCurveDataIsReady;                 // 曲线数据准备好标记
+	void SetCurveData();
 	virtual ~CCollectDoc();
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
 #ifdef _DEBUG
@@ -135,6 +126,8 @@ protected:
 	//{{AFX_MSG(CCollectDoc)
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+private:
+	void RemoveAllCurveData();
 };
 
 /////////////////////////////////////////////////////////////////////////////

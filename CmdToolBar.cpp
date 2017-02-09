@@ -58,12 +58,3 @@ BOOL CCmdToolBar::OnInitDialog(UINT wParam,LONG lParam)
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-/*
-void CCmdToolBar::OnButtonDataSave() 
-{
-	// TODO: Add your control notification handler code here
-	MessageBox(_T("命令工具栏处理"));
-	//(CMainFrame *)theApp.m_pMainWnd->PostMessage(WM_COMMAND,IDC_BUTTON_DATA_SAVE,0);
-	//(CMainFrame *)theApp.m_pMainWnd->SendDlgItemMessage(IDC_BUTTON_DATA_SAVE,BM_CLICK,0,0);
-}*/
-

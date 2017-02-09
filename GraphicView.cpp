@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "collect.h"
+#include "colledoc.h"
 #include "GraphicView.h"
 
 
@@ -37,6 +38,7 @@ BEGIN_MESSAGE_MAP(CGraphicView, CView)
 	ON_WM_TIMER()
 	ON_COMMAND(ID_TEST, OnTest)
 	ON_BN_CLICKED(IDC_BUTTON_DATA_SAVE, OnButtonDataSave)
+	ON_BN_CLICKED(IDC_BUTTON_DATA_LOAD, OnButtonDataLoad)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -71,13 +73,13 @@ void CGraphicView::OnInitialUpdate()
 {
 	CView::OnInitialUpdate();
 	// TODO: Add your specialized code here and/or call the base class
-    AfxGetApp()->GetMainWnd()->SetWindowText(_T("样品测试曲线 V1.0"));
+    AfxGetApp()->GetMainWnd()->SetWindowText(_T("产品测试结果曲线图 V1.0"));
 }
 
 BOOL CGraphicView::OnEraseBkgnd(CDC* pDC) 
 {
 	// TODO: Add your message handler code here and/or call default
-	//return CView::OnEraseBkgnd(pDC);
+	//return CView::OnEraseBkgnd(pDC);   // 图像控件对MFC有要求不允许刷背景
 	return TRUE;
 }
 
@@ -88,16 +90,172 @@ void CGraphicView::OnSize(UINT nType, int cx, int cy)
 	
 	// TODO: Add your message handler code here
 	if(m_hPE)
-	{	
-		PEdestroy(m_hPE);
+	{
+		PEdestroy(m_hPE);	
 	}
 
-	//CreateSimpleGraph(); 	//CreateSimpleSGraph();	
-	OnDrawgraph();
+	//CreateSimpleGraph(); 	
+	//CreateSimpleSGraph();	
+    OnDrawgraph();				// 生成模拟曲线
+
+    //InitDrawGraph();          // 曲线参数配置加载显示	
 }
 
 void CGraphicView::OnDrawgraph() 
 {  
+   InitDrawGraph();				// 曲线参数配置加载显示
+   LoadData2Draw();				// 曲线数据加载显示
+}
+ 
+void CGraphicView::LoadDrawFile()
+{
+	if(m_hPE)
+	{
+		PEdestroy(m_hPE);
+		Invalidate();
+	}
+   
+   RECT rect;
+   GetClientRect( &rect );                                               // 返回客户区尺寸     
+   m_hPE = PEcreate(PECONTROL_SGRAPH, WS_VISIBLE, &rect, m_hWnd, 1001);  // 客户区创建图形对象，返回句柄
+
+   PEloadfromfile(m_hPE, "line.crv");                 // 曲线数据文件加载
+   
+   PEreinitialize(m_hPE);                             // 重置对象新属性和数据，初始化内部变量预备生成新图形
+   PEresetimage(m_hPE, 1, 0);                         // 在编码显示图形时，在设置变量属性并传递数据之后，最后调用更新重新绘图
+   ::InvalidateRect(m_hPE, NULL, FALSE);
+ 
+}
+
+
+void CGraphicView::CreateSimpleSGraph()
+{
+	
+	if(m_hPE)
+		PEdestroy(m_hPE);
+
+	//! Right button click to show popup menu. //
+	//! Double Click to show customization dialog. //
+	//! Left-Click and drag to draw zoom box. Use popup memu or 'z' to undo zoom. // 
+	
+	// Simple example show the basics of a scientific graph object. //
+	// Scientific Graph's contain both YData and XData and thus data
+	// is not plotted equally spaced as the graph object does.
+	
+	RECT rect;
+	GetClientRect( &rect );
+	m_hPE = PEcreate(PECONTROL_SGRAPH, WS_VISIBLE, &rect, m_hWnd, 1001);
+	if( m_hPE )
+	{
+		float fY;
+		float fX;
+		
+		// Set number of Subsets and Points //
+		PEnset(m_hPE, PEP_nSUBSETS, 4);	
+		PEnset(m_hPE, PEP_nPOINTS, 12);	
+		
+		for( int s=0; s<=3; s++ )
+		{
+			for( int p=0; p<=11; p++ )
+			{										  
+				fX = ((float) (p+1)) * 100.0F;
+				PEvsetcellEx (m_hPE, PEP_faXDATA, s, p, &fX);
+				fY = ((float) (p+1) * 1.0F) + GetRandom(1, 250);
+				PEvsetcellEx (m_hPE, PEP_faYDATA, s, p, &fY);
+			}
+		}
+		
+		// Set DataShadows to show shadows
+		PEnset(m_hPE, PEP_nDATASHADOWS, PEDS_SHADOWS);
+		
+		PEszset(m_hPE, PEP_szMAINTITLE,      "历史线性统计曲线");
+		PEszset(m_hPE, PEP_szSUBTITLE,       "程序设计与实现"); 
+		PEszset(m_hPE, PEP_szYAXISLABEL,     "最大应用量");
+		PEszset(m_hPE, PEP_szXAXISLABEL,	 "月 份 ");
+		PEnset( m_hPE, PEP_bFOCALRECT,		 FALSE  );
+		PEnset( m_hPE, PEP_bPREPAREIMAGES,	 TRUE   );
+		PEnset( m_hPE, PEP_bCACHEBMP,		 TRUE   );
+		PEnset( m_hPE, PEP_nPLOTTINGMETHOD,  PEGPM_POINTSPLUSSPLINE);
+		PEnset( m_hPE, PEP_nGRIDLINECONTROL, PEGLC_NONE      );
+		PEnset( m_hPE, PEP_nALLOWZOOMING,	 PEAZ_HORZANDVERT);
+		PEnset( m_hPE, PEP_nZOOMSTYLE,       PEZS_RO2_NOT    );
+		
+		// subset labels //
+		PEvsetcell( m_hPE, PEP_szaSUBSETLABELS, 0, "长沙" );
+		PEvsetcell( m_hPE, PEP_szaSUBSETLABELS, 1, "上海" );
+		PEvsetcell( m_hPE, PEP_szaSUBSETLABELS, 2, "北京" );
+		PEvsetcell( m_hPE, PEP_szaSUBSETLABELS, 3, "广州" );
+		
+		// subset colors
+		DWORD dwArray[4] = { RGB(198,0,0), RGB( 0, 198, 198 ), RGB( 198,198,0 ), RGB( 0,198,0 ) };
+		PEvsetEx( m_hPE, PEP_dwaSUBSETCOLORS, 0, 4, dwArray, 0 );
+		
+		// subset line types
+		int nLineTypes[] = { PELT_MEDIUMSOLID, PELT_MEDIUMSOLID, PELT_MEDIUMSOLID, PELT_MEDIUMSOLID };
+		PEvset(m_hPE, PEP_naSUBSETLINETYPES, nLineTypes, 4);
+		
+		// subset point types
+		int nPointTypes[] = { PEPT_DOTSOLID, PEPT_UPTRIANGLESOLID, PEPT_SQUARESOLID, PEPT_DOWNTRIANGLESOLID };
+		PEvset(m_hPE, PEP_naSUBSETPOINTTYPES, nPointTypes, 4);
+		
+		// Version 4.0 Features //
+		PEnset(m_hPE, PEP_bFIXEDFONTS,			TRUE);
+		PEnset(m_hPE, PEP_bSIMPLEPOINTLEGEND,	TRUE);
+		PEnset(m_hPE, PEP_bSIMPLELINELEGEND,	TRUE);
+		PEnset(m_hPE, PEP_nLEGENDSTYLE, PELS_1_LINE);
+		PEnset(m_hPE, PEP_nMULTIAXISSTYLE, PEMAS_SEPARATE_AXES);
+		
+		// Set Various Other Properties //
+		PEnset(m_hPE, PEP_bBITMAPGRADIENTMODE, TRUE);
+		PEnset(m_hPE, PEP_nQUICKSTYLE, PEQS_MEDIUM_NO_BORDER);
+		
+		PEnset(m_hPE, PEP_nGRADIENTBARS,	8);
+		PEnset(m_hPE, PEP_nTEXTSHADOWS,		PETS_BOLD_TEXT);
+		PEnset(m_hPE, PEP_bMAINTITLEBOLD,   TRUE);
+		PEnset(m_hPE, PEP_bSUBTITLEBOLD,    TRUE);
+		PEnset(m_hPE, PEP_bLABELBOLD,		TRUE);
+		PEnset(m_hPE, PEP_bLINESHADOWS,		TRUE);
+		PEnset(m_hPE, PEP_nFONTSIZE, PEFS_LARGE);
+		PEnset(m_hPE, PEP_bSCROLLINGHORZZOOM, TRUE);
+		
+		
+	}
+}
+
+
+
+
+void CGraphicView::OnTimer(UINT nIDEvent) 
+{
+	// TODO: Add your message handler code here and/or call default
+	CView::OnTimer(nIDEvent);
+}
+
+
+
+void CGraphicView::OnTest() 
+{
+	// TODO: Add your command handler code here
+	MessageBox("asdf");
+}
+
+void CGraphicView::OnButtonDataSave() 
+{
+	// TODO: Add your control notification handler code here
+	//MessageBox("GraphicView保存数据曲线 \n line.crv");
+	PEsavetofile(m_hPE,"line.crv");
+}
+
+void CGraphicView::OnButtonDataLoad() 
+{
+	// TODO: Add your control notification handler code here
+	//MessageBox("GraphicView加载数据，生成曲线\n line.crv");
+	LoadDrawFile();
+
+}
+
+void CGraphicView::InitDrawGraph()
+{
 	if(m_hPE)
 	{
 		PEdestroy(m_hPE);
@@ -110,16 +268,15 @@ void CGraphicView::OnDrawgraph()
 
    RECT rect;
    GetClientRect( &rect );                                               // 返回客户区尺寸     
-
    m_hPE = PEcreate(PECONTROL_SGRAPH, WS_VISIBLE, &rect, m_hWnd, 1001);  // 客户区创建图形对象，返回句柄
 
-   PEnset(m_hPE,  PEP_nSUBSETS,     3   );									 // 设置子集的个数，定义对象包含的子集数
-   PEnset(m_hPE,  PEP_nPOINTS,      100 );									 // 设置子集点数  
+   PEnset(m_hPE,  PEP_nSUBSETS,     3   );								 // 设置子集的个数，定义对象包含的子集数
+   PEnset(m_hPE,  PEP_nPOINTS,      100 );								 // 设置子集点数  
 
    PEszset(m_hPE, PEP_szMAINTITLE,  "样品检测过程");					// 对象的主标题，
    PEszset(m_hPE, PEP_szSUBTITLE,   "编号00001"   );    				// 子标题，标识对象的字幕，在主标题下
-   PEszset(m_hPE, PEP_szYAXISLABEL, "透光率(%)"   );                    // 作为Y轴标签文本
-   PEszset(m_hPE, PEP_szXAXISLABEL, "波长(nm)"    );                    // 作为X轴标签文本
+   PEszset(m_hPE, PEP_szYAXISLABEL, "透光率(% )"  );                    // 作为Y轴标签文本
+   PEszset(m_hPE, PEP_szXAXISLABEL, "波  长(nm)"  );                    // 作为X轴标签文本
    
    PEnset( m_hPE, PEP_nDATASHADOWS,  PEDS_NONE    );                    // 数据曲线显示效果，/无/阴影/3D/ //PEDS_3D//	PEDS_SHADOWS
   
@@ -148,8 +305,8 @@ void CGraphicView::OnDrawgraph()
 */
    int nTmpStyle[3];
    nTmpStyle[0] = PELT_THINSOLID;
-   nTmpStyle[1] = PELT_DOT;//PELT_DASH
-   nTmpStyle[2] = PELT_DOT;//PELT_DASH;//;
+   nTmpStyle[1] = PELT_DOT;	//PELT_DASH
+   nTmpStyle[2] = PELT_DOT;	//PELT_DASH;//;
    PEvset( m_hPE,PEP_naSUBSETLINETYPES,nTmpStyle,3);
 
 /*
@@ -248,8 +405,7 @@ void CGraphicView::OnDrawgraph()
    PEvsetcellEx(m_hPE, PEP_faYDATA, 2, 0, &val);    
    PEvsetcellEx(m_hPE, PEP_faYDATA, 2, 1, &val);
    PEvsetcellEx(m_hPE, PEP_faYDATA, 2, 2, &val);
-   PEvsetcellEx(m_hPE, PEP_faYDATA, 2, 3, &val);  /* */ 
-  
+   PEvsetcellEx(m_hPE, PEP_faYDATA, 2, 3, &val);   /**/ 
    
 //   for (int index=0;index<3;index++)
 //   {   for (int s = 0; s < 4; s++)
@@ -272,167 +428,109 @@ void CGraphicView::OnDrawgraph()
    //float fData[4][20];                           /* first place data into fData */
    //PEvset (m_hPE, PEP_faYDATA, fData, 80);       /* set data, 4 subsets * 20 points = 80 elements */
 
-   PEreinitialize(m_hPE);                             // 重置对象新属性和数据，初始化内部变量预备生成新图形
-   PEresetimage(m_hPE, 1, 0);                         // 在编码显示图形时，在设置变量属性并传递数据之后，最后调用更新重新绘图
-   ::InvalidateRect(m_hPE, NULL, FALSE);
+	int lt = PELT_MEDIUMSOLID;
+	PEvsetcell(m_hPE, PEP_naVERTLINEANNOTATIONTYPE, 0, &lt);
+	
+	COLORREF color = RGB(  0,  0, 255);
+	PEvsetcell(m_hPE, PEP_dwaVERTLINEANNOTATIONCOLOR, 0, &color);	
+	color = RGB(  0, 255, 0 );
+	PEvsetcell(m_hPE, PEP_dwaVERTLINEANNOTATIONCOLOR, 1, &color);	
+	color = RGB( 255,0, 0 );
+	PEvsetcell(m_hPE, PEP_dwaVERTLINEANNOTATIONCOLOR, 2, &color);
+
+    PEreinitialize(m_hPE);                             // 重置对象新属性和数据，初始化内部变量预备生成新图形
+    PEresetimage(m_hPE, 1, 0);                         // 在编码显示图形时，在设置变量属性并传递数据之后，最后调用更新重新绘图
+    ::InvalidateRect(m_hPE, NULL, FALSE);
    
-   m_nRealTimeCounter = 1;                                 // Initialize Counters and Timer 
-   m_nSinCounter      = 1;
 
- 
+}
 
-////**********************************************
-   for(int m_nSinCounter =0;m_nSinCounter<1000;m_nSinCounter++)
+void CGraphicView::LoadData2Draw()
+{
+   //float newy,newx;
+   double dx;   
+
+   //m_nRealTimeCounter = 1;                           // Initialize Counters and Timer 
+   //m_nSinCounter      = 1;
+
+    CCollectDoc *pDoc = ((CCollectDoc *)GetDocument());
+	
+	if ( !pDoc->m_bCurveDataIsReady) 
+		return;
+	
+   /**/
+   	CMyCurveList &rl = pDoc->m_CurveRealList;
+	CMyCurveList &ul = pDoc->m_CurveUpList;
+	CMyCurveList &dl = pDoc->m_CurveDownList;
+
+	POSITION rps = rl.GetHeadPosition();
+	POSITION ups = ul.GetHeadPosition();
+	POSITION dps = dl.GetHeadPosition();
+
+	while( rps && ups && dps )
+	{
+	   CurvePoint  &rcp = rl.GetNext(rps);
+       CurvePoint  &ucp = ul.GetNext(ups);
+       CurvePoint  &dcp = dl.GetNext(dps);
+
+	   PEvsetcellEx(m_hPE, PEP_faYDATA, 0, rcp.snum, &rcp.newy);
+	   PEvsetcellEx(m_hPE, PEP_faXDATA, 0, rcp.snum, &rcp.newx);
+	   dx = (double)rcp.newx;
+	   PEvsetcell(m_hPE, PEP_faVERTLINEANNOTATION, 0, &dx);
+
+	   PEvsetcellEx(m_hPE, PEP_faYDATA, 1, ucp.snum, &ucp.newy);
+	   PEvsetcellEx(m_hPE, PEP_faXDATA, 1, ucp.snum, &ucp.newx);
+	   dx = (double)ucp.newx;
+	   PEvsetcell(m_hPE, PEP_faVERTLINEANNOTATION, 1, &dx);
+
+	   PEvsetcellEx(m_hPE, PEP_faYDATA, 2, dcp.snum, &dcp.newy);
+	   PEvsetcellEx(m_hPE, PEP_faXDATA, 2, dcp.snum, &dcp.newx);
+	   dx = (double)dcp.newx;
+	   PEvsetcell(m_hPE, PEP_faVERTLINEANNOTATION, 2, &dx);
+
+	}
+   
+	/*
+   for( m_nSinCounter = 0; m_nSinCounter < 1000; m_nSinCounter+=2)
    {
-			float newy,newx;
+			// 同时模拟3条曲线
 			newy = 50.0F + float(sin((double) m_nSinCounter * 0.075F) * 30.0F) + GetRandom(1, 15);
 			newx = float(m_nRealTimeCounter);
-			
-			// Update new data at current index //
-			PEvsetcellEx(m_hPE, PEP_faYDATA, 0, m_nRealTimeCounter, &newy);
-			PEvsetcellEx(m_hPE, PEP_faXDATA, 0, m_nRealTimeCounter, &newx);
+			PEvsetcellEx(m_hPE, PEP_faYDATA, 1, m_nRealTimeCounter, &newy);
+			PEvsetcellEx(m_hPE, PEP_faXDATA, 1, m_nRealTimeCounter, &newx);
+		
 			newy = 50.0F - float(sin((double) m_nSinCounter * 0.075F) * 30.0F) + GetRandom(1, 15);
 			newx = float(m_nRealTimeCounter);
 			PEvsetcellEx(m_hPE, PEP_faYDATA, 1, m_nRealTimeCounter, &newy);
 			PEvsetcellEx(m_hPE, PEP_faXDATA, 1, m_nRealTimeCounter, &newx);
+			
 			newy = 50.0F + float(sin((double) m_nSinCounter * 0.075F) * 12.0F) - GetRandom(1, 15);
 			newx = float(m_nRealTimeCounter);
 			PEvsetcellEx(m_hPE, PEP_faYDATA, 2, m_nRealTimeCounter, &newy);
 			PEvsetcellEx(m_hPE, PEP_faXDATA, 2, m_nRealTimeCounter, &newx);
 			
-			double dx;
-			dx = (double) newx;
-			PEvsetcell(m_hPE, PEP_faVERTLINEANNOTATION, 0, &dx);
-			PEvsetcell(m_hPE, PEP_faVERTLINEANNOTATION, 2, &dx);
+			dx = (double)newx;
+			PEvsetcell(m_hPE, PEP_faVERTLINEANNOTATION, 1, &dx);
+		    PEvsetcell(m_hPE, PEP_faVERTLINEANNOTATION, 2, &dx);
 			PEvsetcell(m_hPE, PEP_faVERTLINEANNOTATION, 3, &dx);
-			int lt = PELT_MEDIUMSOLID;
-			PEvsetcell(m_hPE, PEP_naVERTLINEANNOTATIONTYPE, 0, &lt);
+
+			// m_nRealTimeCounter++
+			if ((m_nRealTimeCounter++)==100)	m_nRealTimeCounter = 0;		// Reset counter at end of data 
 			
-			COLORREF col;
-			col = RGB(  0,  0, 198);
-			PEvsetcell(m_hPE, PEP_dwaVERTLINEANNOTATIONCOLOR, 0, &col);				col = RGB(  0, 198, 0 );
-			PEvsetcell(m_hPE, PEP_dwaVERTLINEANNOTATIONCOLOR, 1, &col);				col = RGB( 255,198, 0 );
-			PEvsetcell(m_hPE, PEP_dwaVERTLINEANNOTATIONCOLOR, 2, &col);
+			//m_nSinCounter = m_nSinCounter + 1;							// SinCounter is only to produce sin wave data //
+			//if (m_nSinCounter > 30000) 		m_nSinCounter = 1;
+            TRACE("sincount = %f, RealTimeCounter = %f\n", newy,newx );
 
-			// Increment counter //
-			m_nRealTimeCounter = m_nRealTimeCounter + 1;
-			
-			// Reset counter at end of data //
-			if (m_nRealTimeCounter == 100)
-				m_nRealTimeCounter = 0;
-			
-			// SinCounter is only to produce sin wave data //
-			m_nSinCounter = m_nSinCounter + 1;
-			if (m_nSinCounter > 30000) 
-				m_nSinCounter = 1;
-			
+   }*/
+	
+	// Update image and force paint //
+	PEreinitialize( m_hPE );		//	PEresetimage( m_hPE, 0, 0 );
+	PEresetimage( m_hPE, 1, 0 );    // Relative width,Relative height,
+	::InvalidateRect(m_hPE, NULL, FALSE);
 
-
-   }
-			// Update image and force paint //
-			PEreinitialize( m_hPE );		//	PEresetimage( m_hPE, 0, 0 );
-			PEresetimage( m_hPE, 1, 0 );    // Relative width,Relative height,
-			::InvalidateRect(m_hPE, NULL, FALSE);
-
-   //SetTimer( 1, 100, NULL );
-
-
- 
+	
 }
- 
-void CGraphicView::CreateSimpleSGraph()
-{
-	
-	if(m_hPE)
-		PEdestroy(m_hPE);
 
-	//! Right button click to show popup menu. //
-	//! Double Click to show customization dialog. //
-	//! Left-Click and drag to draw zoom box. Use popup memu or 'z' to undo zoom. // 
-	
-	// Simple example show the basics of a scientific graph object. //
-	// Scientific Graph's contain both YData and XData and thus data
-	// is not plotted equally spaced as the graph object does.
-	
-	RECT rect;
-	GetClientRect( &rect );
-	m_hPE = PEcreate(PECONTROL_SGRAPH, WS_VISIBLE, &rect, m_hWnd, 1001);
-	if( m_hPE )
-	{
-		float fY;
-		float fX;
-		
-		// Set number of Subsets and Points //
-		PEnset(m_hPE, PEP_nSUBSETS, 4);	
-		PEnset(m_hPE, PEP_nPOINTS, 12);	
-		
-		for( int s=0; s<=3; s++ )
-		{
-			for( int p=0; p<=11; p++ )
-			{										  
-				fX = ((float) (p+1)) * 100.0F;
-				PEvsetcellEx (m_hPE, PEP_faXDATA, s, p, &fX);
-				fY = ((float) (p+1) * 1.0F) + GetRandom(1, 250);
-				PEvsetcellEx (m_hPE, PEP_faYDATA, s, p, &fY);
-			}
-		}
-		
-		// Set DataShadows to show shadows
-		PEnset(m_hPE, PEP_nDATASHADOWS, PEDS_SHADOWS);
-		
-		PEszset(m_hPE, PEP_szMAINTITLE,  "历史线性统计曲线");
-		PEszset(m_hPE, PEP_szSUBTITLE,   "程序设计与实现"); 
-		PEszset(m_hPE, PEP_szYAXISLABEL, "最大应用量");
-		PEszset(m_hPE, PEP_szXAXISLABEL, "月份");
-		PEnset( m_hPE, PEP_bFOCALRECT,		 FALSE  );
-		PEnset( m_hPE, PEP_bPREPAREIMAGES,	 TRUE   );
-		PEnset( m_hPE, PEP_bCACHEBMP,		 TRUE   );
-		PEnset( m_hPE, PEP_nPLOTTINGMETHOD,  PEGPM_POINTSPLUSSPLINE);
-		PEnset( m_hPE, PEP_nGRIDLINECONTROL, PEGLC_NONE      );
-		PEnset( m_hPE, PEP_nALLOWZOOMING,	 PEAZ_HORZANDVERT);
-		PEnset( m_hPE, PEP_nZOOMSTYLE,       PEZS_RO2_NOT    );
-		
-		// subset labels //
-		PEvsetcell( m_hPE, PEP_szaSUBSETLABELS, 0, "长沙" );
-		PEvsetcell( m_hPE, PEP_szaSUBSETLABELS, 1, "上海" );
-		PEvsetcell( m_hPE, PEP_szaSUBSETLABELS, 2, "北京" );
-		PEvsetcell( m_hPE, PEP_szaSUBSETLABELS, 3, "广州" );
-		
-		// subset colors
-		DWORD dwArray[4] = { RGB(198,0,0), RGB( 0, 198, 198 ), RGB( 198,198,0 ), RGB( 0,198,0 ) };
-		PEvsetEx( m_hPE, PEP_dwaSUBSETCOLORS, 0, 4, dwArray, 0 );
-		
-		// subset line types
-		int nLineTypes[] = { PELT_MEDIUMSOLID, PELT_MEDIUMSOLID, PELT_MEDIUMSOLID, PELT_MEDIUMSOLID };
-		PEvset(m_hPE, PEP_naSUBSETLINETYPES, nLineTypes, 4);
-		
-		// subset point types
-		int nPointTypes[] = { PEPT_DOTSOLID, PEPT_UPTRIANGLESOLID, PEPT_SQUARESOLID, PEPT_DOWNTRIANGLESOLID };
-		PEvset(m_hPE, PEP_naSUBSETPOINTTYPES, nPointTypes, 4);
-		
-		// Version 4.0 Features //
-		PEnset(m_hPE, PEP_bFIXEDFONTS,			TRUE);
-		PEnset(m_hPE, PEP_bSIMPLEPOINTLEGEND,	TRUE);
-		PEnset(m_hPE, PEP_bSIMPLELINELEGEND,	TRUE);
-		PEnset(m_hPE, PEP_nLEGENDSTYLE, PELS_1_LINE);
-		PEnset(m_hPE, PEP_nMULTIAXISSTYLE, PEMAS_SEPARATE_AXES);
-		
-		// Set Various Other Properties //
-		PEnset(m_hPE, PEP_bBITMAPGRADIENTMODE, TRUE);
-		PEnset(m_hPE, PEP_nQUICKSTYLE, PEQS_MEDIUM_NO_BORDER);
-		
-		PEnset(m_hPE, PEP_nGRADIENTBARS,	8);
-		PEnset(m_hPE, PEP_nTEXTSHADOWS,		PETS_BOLD_TEXT);
-		PEnset(m_hPE, PEP_bMAINTITLEBOLD,   TRUE);
-		PEnset(m_hPE, PEP_bSUBTITLEBOLD,    TRUE);
-		PEnset(m_hPE, PEP_bLABELBOLD,		TRUE);
-		PEnset(m_hPE, PEP_bLINESHADOWS,		TRUE);
-		PEnset(m_hPE, PEP_nFONTSIZE, PEFS_LARGE);
-		PEnset(m_hPE, PEP_bSCROLLINGHORZZOOM, TRUE);
-		
-		
-	}
-}
 
 void CGraphicView::CreateSimpleGraph()
 { 
@@ -456,9 +554,8 @@ void CGraphicView::CreateSimpleGraph()
 		PEnset(m_hPE, PEP_nPOINTS, 12);
 		
 		float fY;
-		for (int s=0; s<=3; s++)
-		{
-			for (int p=0; p<=11; p++)
+		for (    int s=0; s<=3;  s++ )
+		{	for (int p=0; p<=11; p++ )
 			{
 				fY = float((p + 1) * 50) + GetRandom(2, 250);
 				PEvsetcellEx(m_hPE, PEP_faYDATA, s, p, &fY);
@@ -511,9 +608,10 @@ void CGraphicView::CreateSimpleGraph()
 		PEvset(m_hPE, PEP_naSUBSETLINETYPES, nLineTypes, 8);
 		
 		// subset point types //
-		int nPointTypes[] = { PEPT_DOTSOLID, PEPT_UPTRIANGLESOLID, 
-			PEPT_SQUARESOLID, PEPT_DOWNTRIANGLESOLID, PEPT_DOT, 
-			PEPT_UPTRIANGLE, PEPT_SQUARE, PEPT_DOWNTRIANGLE };
+		int nPointTypes[] = {	PEPT_DOTSOLID,		PEPT_UPTRIANGLESOLID, 
+								PEPT_SQUARESOLID,	PEPT_DOWNTRIANGLESOLID, PEPT_DOT, 
+								PEPT_UPTRIANGLE,	PEPT_SQUARE, PEPT_DOWNTRIANGLE 
+							};
 		PEvset(m_hPE, PEP_naSUBSETPOINTTYPES, nPointTypes, 8);
 		
 		// Allow stacked type graphs //
@@ -537,27 +635,4 @@ void CGraphicView::CreateSimpleGraph()
 		PEnset(m_hPE, PEP_nFONTSIZE, PEFS_LARGE);
 		
 	}
-}
-
-
-void CGraphicView::OnTimer(UINT nIDEvent) 
-{
-	// TODO: Add your message handler code here and/or call default
-
-	CView::OnTimer(nIDEvent);
-
-}
-
-
-
-void CGraphicView::OnTest() 
-{
-	// TODO: Add your command handler code here
-	MessageBox("asdf");
-}
-
-void CGraphicView::OnButtonDataSave() 
-{
-	// TODO: Add your control notification handler code here
-	MessageBox("mainFrame 再处理！");
 }

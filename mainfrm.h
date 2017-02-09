@@ -64,6 +64,7 @@ protected:
 	afx_msg void OnButton1();
 	afx_msg void OnCommset();
 	afx_msg void OnMenuNewUser();
+	afx_msg void OnButton2();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

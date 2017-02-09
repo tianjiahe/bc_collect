@@ -115,9 +115,11 @@ END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CCollectDoc construction/destruction
+#define GetRandom(min,max) ((rand()%(int)(((max)+1)-(min)))+(min))
 
 CCollectDoc::CCollectDoc()
 {
+	m_bCurveDataIsReady = FALSE;
 }
 
 CCollectDoc::~CCollectDoc()
@@ -128,80 +130,97 @@ BOOL CCollectDoc::OnNewDocument()
 {
 	if (!CDocument::OnNewDocument())
 		return FALSE;
+    /*  */
+	
+	m_intList.AddTail(100);
+
+	m_dwArray.Add(100000);
+
+	CPoint pt(10,10);
+	m_ptArray.Add(pt);
 
 	CString strFirst;
 	strFirst.LoadString(IDS_INITIAL_STRING);
 	m_stringList.AddTail(strFirst);
 
+	CString strKey, strValue;
+	strKey.LoadString(IDS_INITIAL_KEY);
+	strValue.LoadString(IDS_INITIAL_VALUE);
+	m_mapStringToString[strKey] = strValue;	
+	
 	CMyStruct* pMyStruct = new CMyStruct();
-	pMyStruct->m_int = 1234;
+	pMyStruct->m_int   = 1234;
 	pMyStruct->m_float = 12.34f;
 	pMyStruct->m_str.LoadString(IDS_INITIAL_STRING);
 	m_mystructList.AddTail(pMyStruct);
 
-	m_intList.AddTail(100);
-
-	m_dwArray.Add(100000);
-
+	CMyStruct* pMyStruct2 = new CMyStruct();
+	pMyStruct2->m_int   = 2468;
+	pMyStruct2->m_float = 24.68f;
+	pMyStruct2->m_str.LoadString(IDS_INITIAL_STRING);
+	m_mapDWordToMyStruct[100] = pMyStruct2;	
+	
 	CMyObject* pMyObject = new CMyObject();
-	pMyObject->m_int = 5678;
+	pMyObject->m_int   = 5678;
 	pMyObject->m_float = 56.78f;
 	pMyObject->m_str.LoadString(IDS_INITIAL_STRING);
 	m_myobArray.Add(pMyObject);
 
-	CPoint pt(10,10);
-	m_ptArray.Add(pt);
-
-	CString strKey, strValue;
-	strKey.LoadString(IDS_INITIAL_KEY);
-	strValue.LoadString(IDS_INITIAL_VALUE);
-	m_mapStringToString[strKey] = strValue;
-
-
 	CMyObject* pMyObject2 = new CMyObject();
-	pMyObject2->m_int = 1357;
+	pMyObject2->m_int   = 1357;
 	pMyObject2->m_float = 13.57f;
 	pMyObject2->m_str.LoadString(IDS_INITIAL_STRING);
 	m_mapStringToMyObject[strKey] = pMyObject2;
+    
+//  模拟生成曲线数据
+//	CurvePoint cp;
+//	for (int i = 0; i < 500; i++ )
+//	{
+//		cp.snum = ( i % 100 ) ;
+//		cp.newy  = 50.0F + float(sin((double) i * 0.075F) * 30.0F) + GetRandom(1, 9);
+//		cp.newx  = float(cp.snum);
+//		m_CurveRealList.AddTail(cp);
+//    
+//        cp.newy  = 50.0F - float(sin((double) i * 0.075F) * 30.0F) + GetRandom(1, 6);
+//		m_CurveUpList.AddTail(cp);
+//
+//		cp.newy  = 50.0F + float(sin((double) i * 0.075F) * 12.0F) - GetRandom(1, 6);
+//		m_CurveDownList.AddTail(cp);
+// 	}
 
-	CMyStruct* pMyStruct2 = new CMyStruct();
-	pMyStruct2->m_int = 2468;
-	pMyStruct2->m_float = 24.68f;
-	pMyStruct2->m_str.LoadString(IDS_INITIAL_STRING);
-	m_mapDWordToMyStruct[100] = pMyStruct2;
-
-	return TRUE;
+ 	return TRUE;
 }
 
 void CCollectDoc::DeleteContents()
 {
 	m_stringList.RemoveAll();
 
-	POSITION pos = m_mystructList.GetHeadPosition();
-	while (pos != NULL)
-	{
-		delete m_mystructList.GetNext(pos);
-	}
-	m_mystructList.RemoveAll();
-
 	m_intList.RemoveAll();
-
+	
 	m_dwArray.RemoveAll();
-
-	for (int n = 0; n < m_myobArray.GetSize(); n++)
-	{
-		delete m_myobArray[n];
-	}
-	m_myobArray.RemoveAll();
 
 	m_mapStringToString.RemoveAll();
 
 	m_ptArray.RemoveAll();
 
+	POSITION pos = m_mystructList.GetHeadPosition();
+	while (pos != NULL)	   
+	{
+		delete m_mystructList.GetNext(pos);	
+	}
+	m_mystructList.RemoveAll();
+
+
+	for (int n = 0; n < m_myobArray.GetSize(); n++)	
+	{
+		delete m_myobArray[n];	
+	}
+	m_myobArray.RemoveAll();
+
 	pos = m_mapStringToMyObject.GetStartPosition();
 	while (pos != NULL)
 	{
-		CString str;
+		CString    str;
 		CMyObject* pMyObject;
 		m_mapStringToMyObject.GetNextAssoc(pos, str, pMyObject);
 		delete pMyObject;
@@ -211,12 +230,15 @@ void CCollectDoc::DeleteContents()
 	pos = m_mapDWordToMyStruct.GetStartPosition();
 	while (pos != NULL)
 	{
-		DWORD dwKey;
+		DWORD      dwKey;
 		CMyStruct* pMyStruct;
 		m_mapDWordToMyStruct.GetNextAssoc(pos, dwKey, pMyStruct);
-		delete pMyStruct;
+		delete     pMyStruct;
 	}
 	m_mapDWordToMyStruct.RemoveAll();
+	
+    RemoveAllCurveData();
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -261,17 +283,11 @@ void CCollectDoc::Serialize(CArchive& ar)
 	}
 
 	m_intList.Serialize(ar);
-
 	m_dwArray.Serialize(ar);
-
 	m_myobArray.Serialize(ar);
-
 	m_ptArray.Serialize(ar);
-
-	m_mapStringToString.Serialize(ar);
-
+    m_mapStringToString.Serialize(ar);
 	m_mapStringToMyObject.Serialize(ar);
-
 	m_mapDWordToMyStruct.Serialize(ar);
 }
 
@@ -292,3 +308,40 @@ void CCollectDoc::Dump(CDumpContext& dc) const
 
 /////////////////////////////////////////////////////////////////////////////
 // CCollectDoc commands
+
+void CCollectDoc::SetCurveData()
+{
+   m_bCurveDataIsReady = FALSE;
+   
+   RemoveAllCurveData();
+
+   // 添加模拟数据
+   if( m_CurveRealList.IsEmpty() && 
+	   m_CurveUpList.IsEmpty()   && 
+	   m_CurveDownList.IsEmpty()   )
+   {
+	   	CurvePoint cp;
+		for (int i = 0; i < 500; i++ )
+		{
+			cp.snum = ( i % 100 ) ;
+			cp.newy  = 50.0F + float(sin((double) i * 0.075F) * 30.0F) + GetRandom(1, 9);
+			cp.newx  = float(cp.snum);
+			m_CurveRealList.AddTail(cp);
+    
+			cp.newy  = 50.0F - float(sin((double) i * 0.075F) * 30.0F) + GetRandom(1, 6);
+			m_CurveUpList.AddTail(cp);
+
+			cp.newy  = 50.0F + float(sin((double) i * 0.075F) * 12.0F) - GetRandom(1, 6);
+			m_CurveDownList.AddTail(cp);
+		}
+   }
+   m_bCurveDataIsReady = TRUE;
+
+}
+
+void CCollectDoc::RemoveAllCurveData()
+{ 
+	m_CurveUpList.RemoveAll();
+    m_CurveRealList.RemoveAll();
+    m_CurveDownList.RemoveAll();
+}

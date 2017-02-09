@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CIntListView
+LastClass=CMainFrame
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "collect.h"
@@ -32,23 +32,23 @@ Class20=CTypedPtrListView
 Class21=CTypedPtrMapView
 
 ResourceCount=17
-Resource1=IDD_DIALOG_COMMAND_TOOLBAR
-Resource2=IDD_DIALOG_NEW_USER
-Resource3=IDD_TYPED_PTR_LIST (English (U.S.))
-Resource4=IDR_MAINFRAME
-Resource5=IDD_TYPED_PTR_MAP (English (U.S.))
-Resource6=IDD_DWORD_ARRAY
-Resource7=IDD_DIALOG_COM
-Resource8=IDD_ABOUTBOX
-Resource9=IDD_DIALOG_OPERATE_TOOLBAR
-Resource10=IDD_STRING_LIST
-Resource11=IDD_INT_LIST
-Resource12=IDD_MAP_STRING_TO_STRING (English (U.S.))
-Resource13=IDD_TYPED_PTR_ARRAY
-Resource14=IDD_MAP_DWORD_TO_MYSTRUCT (English (U.S.))
-Resource15=IDD_POINT_ARRAY (English (U.S.))
+Resource1=IDD_MAP_STRING_TO_STRING (English (U.S.))
+Resource2=IDD_TYPED_PTR_MAP (English (U.S.))
+Resource3=IDD_INT_LIST
+Resource4=IDD_TYPED_PTR_LIST (English (U.S.))
+Resource5=IDD_DIALOG_COM
+Resource6=IDR_MAINFRAME
+Resource7=IDD_STRING_LIST
+Resource8=IDD_TYPED_PTR_ARRAY
+Resource9=IDD_DIALOG_NEW_USER
+Resource10=IDD_DWORD_ARRAY
+Resource11=IDD_MAP_DWORD_TO_MYSTRUCT (English (U.S.))
+Resource12=IDD_DIALOG_COMMAND_TOOLBAR
+Resource13=IDD_DIALOG_OPERATE_TOOLBAR
+Resource14=IDD_POINT_ARRAY (English (U.S.))
+Resource15=IDD_DIALOG_USER
 Class22=CBinEdit
-Resource16=IDD_DIALOG_USER
+Resource16=IDD_ABOUTBOX
 Class23=CDlgNewUser
 Resource17=IDR_MAINFRAME (English (U.S.))
 
@@ -57,6 +57,9 @@ Type=0
 BaseClass=CDialogBar
 HeaderFile=CmdToolBar.h
 ImplementationFile=CmdToolBar.cpp
+Filter=D
+VirtualFilter=dWC
+LastObject=IDC_BUTTON2
 
 [CLS:CCollectApp]
 Type=0
@@ -115,6 +118,9 @@ Type=0
 BaseClass=CView
 HeaderFile=GraphicView.h
 ImplementationFile=GraphicView.cpp
+Filter=C
+VirtualFilter=VWC
+LastObject=IDC_BUTTON_DATA_LOAD
 
 [CLS:CIntListView]
 Type=0
@@ -159,6 +165,7 @@ Type=0
 BaseClass=CFormView
 HeaderFile=ptarryvw.h
 ImplementationFile=ptarryvw.cpp
+LastObject=65535
 
 [CLS:CRealGraphView]
 Type=0
@@ -199,14 +206,15 @@ ImplementationFile=typtrmap.cpp
 [DLG:IDD_DIALOG_COMMAND_TOOLBAR]
 Type=1
 Class=CCmdToolBar
-ControlCount=7
+ControlCount=8
 Control1=IDC_COMBO_SCAN_MODEL_SELECT,combobox,1344339971
 Control2=IDC_BUTTON_DATA_SAVE,button,1342242816
 Control3=IDC_CHECK1,button,1342242819
-Control4=IDC_STATIC,static,1342308352
-Control5=IDC_EDIT1,edit,1350631552
-Control6=IDC_STATIC,static,1342308352
-Control7=IDC_CHECK_START_SCAN,button,1342246915
+Control4=IDC_EDIT1,edit,1350631552
+Control5=IDC_STATIC,static,1342308352
+Control6=IDC_CHECK_START_SCAN,button,1342246915
+Control7=IDC_BUTTON_DATA_LOAD,button,1342242816
+Control8=IDC_BUTTON2,button,1342242816
 
 [DLG:IDD_ABOUTBOX]
 Type=1

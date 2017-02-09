@@ -6,43 +6,13 @@
 --------------------Configuration: Collect - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP1C8.tmp" with contents
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP3C9.tmp" with contents
 [
 /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /FR".\Debug/" /Fp".\Debug/collect.pch" /Yu"Stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
-"D:\kinggsoft\BinEdit.cpp"
-"D:\kinggsoft\CmdToolBar.cpp"
-"D:\kinggsoft\collect.cpp"
-"D:\kinggsoft\colledoc.cpp"
-"D:\kinggsoft\collevw.cpp"
-"D:\kinggsoft\CommSet.cpp"
-"D:\kinggsoft\DlgNewUser.cpp"
-"D:\kinggsoft\DlgUser.cpp"
-"D:\kinggsoft\dwarryvw.cpp"
 "D:\kinggsoft\GraphicView.cpp"
-"D:\kinggsoft\IniOp.cpp"
-"D:\kinggsoft\intlstvw.cpp"
-"D:\kinggsoft\mainfrm.cpp"
-"D:\kinggsoft\mapdwvw.cpp"
-"D:\kinggsoft\mapssvw.cpp"
-"D:\kinggsoft\OperteToolBar.cpp"
-"D:\kinggsoft\Protocol.cpp"
-"D:\kinggsoft\ptarryvw.cpp"
-"D:\kinggsoft\RealGraphView.cpp"
-"D:\kinggsoft\SerialPort.cpp"
-"D:\kinggsoft\Splash.cpp"
-"D:\kinggsoft\strlstvw.cpp"
-"D:\kinggsoft\typaryvw.cpp"
-"D:\kinggsoft\typlstvw.cpp"
-"D:\kinggsoft\typtrmap.cpp"
 ]
-Creating command line "cl.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP1C8.tmp" 
-Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP1C9.tmp" with contents
-[
-/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /FR".\Debug/" /Fp".\Debug/collect.pch" /Yc"Stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
-"D:\kinggsoft\stdafx.cpp"
-]
-Creating command line "cl.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP1C9.tmp" 
-Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP1CA.tmp" with contents
+Creating command line "cl.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP3C9.tmp" 
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP3CA.tmp" with contents
 [
 /nologo /subsystem:windows /incremental:yes /pdb:".\Debug/collect.pdb" /debug /machine:I386 /out:".\Debug/collect.exe" 
 .\Debug\BinEdit.obj
@@ -73,46 +43,12 @@ Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP1CA.tmp" with con
 .\Debug\typtrmap.obj
 .\Debug\collect.res
 ]
-Creating command line "link.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP1CA.tmp"
+Creating command line "link.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP3CA.tmp"
 <h3>Output Window</h3>
 Compiling...
-stdafx.cpp
-Compiling...
-BinEdit.cpp
-CmdToolBar.cpp
-collect.cpp
-colledoc.cpp
-collevw.cpp
-CommSet.cpp
-DlgNewUser.cpp
-DlgUser.cpp
-dwarryvw.cpp
 GraphicView.cpp
-IniOp.cpp
-intlstvw.cpp
-mainfrm.cpp
-mapdwvw.cpp
-mapssvw.cpp
-OperteToolBar.cpp
-Protocol.cpp
-ptarryvw.cpp
-RealGraphView.cpp
-D:\kinggsoft\RealGraphView.cpp(292) : warning C4101: 'YData' : unreferenced local variable
-D:\kinggsoft\RealGraphView.cpp(291) : warning C4101: 'newx2' : unreferenced local variable
-D:\kinggsoft\RealGraphView.cpp(296) : warning C4101: 'petm' : unreferenced local variable
-D:\kinggsoft\RealGraphView.cpp(293) : warning C4101: 'XData' : unreferenced local variable
-D:\kinggsoft\RealGraphView.cpp(294) : warning C4101: 'dx' : unreferenced local variable
-SerialPort.cpp
-Generating Code...
-Compiling...
-Splash.cpp
-strlstvw.cpp
-typaryvw.cpp
-typlstvw.cpp
-typtrmap.cpp
-Generating Code...
 Linking...
-Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP1CC.tmp" with contents
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP3CB.tmp" with contents
 [
 /nologo /o".\Debug/collect.bsc" 
 .\Debug\stdafx.sbr
@@ -141,14 +77,14 @@ Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP1CC.tmp" with con
 .\Debug\typaryvw.sbr
 .\Debug\typlstvw.sbr
 .\Debug\typtrmap.sbr]
-Creating command line "bscmake.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP1CC.tmp"
+Creating command line "bscmake.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP3CB.tmp"
 Creating browse info file...
 <h3>Output Window</h3>
 
 
 
 <h3>Results</h3>
-collect.exe - 0 error(s), 5 warning(s)
+collect.exe - 0 error(s), 0 warning(s)
 </pre>
 </body>
 </html>

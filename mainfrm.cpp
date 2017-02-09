@@ -13,9 +13,10 @@
 #include "stdafx.h"
 #include "collect.h"
 
-#include "mainfrm.h"
 
+#include "mainfrm.h"
 #include "colledoc.h"
+
 #include "strlstvw.h"
 #include "typlstvw.h"
 #include "intlstvw.h"
@@ -57,6 +58,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_BN_CLICKED(IDC_BUTTON1,				OnButton1)
 	ON_COMMAND(ID_COMMSET,					OnCommset)
 	ON_COMMAND(ID_MENU_NEW_USER,            OnMenuNewUser)
+	ON_BN_CLICKED(IDC_BUTTON2, OnButton2)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -204,8 +206,10 @@ void CMainFrame::Dump(CDumpContext& dc) const
 
 void CMainFrame::OnExample(UINT nCmdID)
 {
-	if (nCmdID == m_nCurrentExample)                       // 菜单中选中一个不同的视图选项后
+	if (nCmdID == m_nCurrentExample)
+	{
 		return;  // already selected
+	}
 
 	// Set the child window ID of the active view to AFX_IDW_PANE_FIRST.
 	// This is necessary so that CFrameWnd::RecalcLayout will allocate
@@ -278,7 +282,7 @@ BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO*
 void CMainFrame::OnButtonDataSave() 
 {
 	// TODO: Add your control notification handler code here
-	MessageBox("主框架再处理 保存");
+	MessageBox("当前没有需要保存的曲线文件\n process in MainFrame::OnButtonDataSave()");
 }
 
 
@@ -322,14 +326,6 @@ void CMainFrame::OnCheckStartScan()
   	
 }
 
-void CMainFrame::OnButton1() 
-{
-	// TODO: Add your control notification handler code here
-	MessageBox("打开当前的扫描的样品曲线图\n带游标带点显示，显示参考曲线");
-	OnExample(ID_GRAPH_VIEW);
-	
-	
-}
 
 void CMainFrame::OnCommset() 
 {
@@ -449,3 +445,24 @@ void CMainFrame::OnMenuNewUser()
 	
 }
 
+
+void CMainFrame::OnButton2() 
+{
+	// TODO: Add your control notification handler code here
+	MessageBox(" 先切换到曲线显示状态图 \n\n in CMainFrame::OnButton2()");
+    OnExample(ID_GRAPH_VIEW);
+}
+
+void CMainFrame::OnButton1() 
+{
+	// TODO: Add your control notification handler code here
+	MessageBox(" 生成模拟曲线数据并显示 \n \n in CMainFrame::OnButton1()");
+    
+	((CCollectDoc *)GetActiveDocument())->SetCurveData();   // Doc 生成模拟数据
+
+	GetActiveView()->SendMessage(WM_SIZE,NULL,NULL);        // 
+    
+	
+	
+
+}

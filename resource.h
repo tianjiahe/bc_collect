@@ -118,6 +118,8 @@
 #define IDC_EDIT_PASSWORD2              1111
 #define IDC_CMB_USER                    1112
 #define IDC_EDIT1_USER_PASSWORD         1113
+#define IDC_BUTTON_DATA_LOAD            1114
+#define IDC_BUTTON2                     1115
 #define ID_STRINGLIST                   32774
 #define ID_TYPEDLIST                    32775
 #define ID_CLIST                        32776
@@ -161,7 +163,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        152
 #define _APS_NEXT_COMMAND_VALUE         32791
-#define _APS_NEXT_CONTROL_VALUE         1114
+#define _APS_NEXT_CONTROL_VALUE         1116
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif
